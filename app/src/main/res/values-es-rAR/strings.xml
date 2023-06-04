@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HCI-MobileApp</string>
+    <string name="On">Encendido</string>
+    <string name="Off">Apagado</string>
+    <string name="genre">Cambiar Genero</string>
+    <string name="change_color">Cambiar color</string>
+    <string name="intensity">Intensidad</string>
+    <string name="mode">Modo</string>
+    <string name="vertical_swing">Desplazamiento Vertical</string>
+    <string name="horizontal_swing">Desplazamiento Horizontal</string>
+    <string name="fan_speed">Velocidad del ventilad</string>
+    <string name="classic">Clasica</string>
+    <string name="hot">Calor</string>
+    <string name="cold">" Frío "</string>
+    <string name="ventilation">Ventilación</string>
+    <string name="party">Fiesta</string>
+    <string name="vacation">Vacaciones</string>
+    <string name="temperature">Temperatura</string>
+    <string name="speaker">Parlate</string>
+    <string name="fridge">Heladera</string>
+    <string name="ac">Aire Acondicionado</string>
+    <string name="lamp">"Lámpara "</string>
+    <string name="faucet">Grifo</string>
+    <string name="dispense">Dispensar</string>
+    <string name="automatic">Automático</string>
+</resources>
