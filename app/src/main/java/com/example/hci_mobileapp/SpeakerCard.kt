@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialogDefaults
@@ -44,9 +45,9 @@ data class SpeakerIcons(
     @DrawableRes val more: Int = R.drawable.baseline_more_vert_24
 )
 
-data class SpeakerStringActions(
-    @StringRes val playlist: Int = R.string.playlist,
-    @StringRes val genre: Int = R.string.genre,
+data class SpeakerActionsIcons(
+    @DrawableRes val plist: Int = R.drawable.baseline_playlist_play_24,
+    @DrawableRes val gen: Int = R.drawable.baseline_music_note_24
 )
 
 /*data class SpeakerGenres(
@@ -62,15 +63,15 @@ fun SpeakerCard(
     name : String,
     modifier: Modifier = Modifier,
     speakerToRend: SpeakerIcons = SpeakerIcons(),
-    actions: SpeakerStringActions = SpeakerStringActions(),
+    actions: Array<String> = stringArrayResource(id = R.array.speaker_functions),
+    actionIcons: Array<Int> = arrayOf(  R.drawable.baseline_playlist_play_24, R.drawable.baseline_music_note_24),
     genres: Array<String> = stringArrayResource(id = R.array.genres)
-){
+) {
     val dialogOpen = remember {
         mutableStateOf(false)
     }
-    LazyColumn(){
-        itemsIndexed(items = genres){
-            index,item ->
+    LazyColumn() {
+        itemsIndexed(items = genres) { index, item ->
         }
     }
     Surface(
@@ -80,10 +81,12 @@ fun SpeakerCard(
     ) {
         Column(
             modifier = Modifier
-                .padding(horizontal = 3.dp,
-                    vertical = 4.dp),
+                .padding(
+                    horizontal = 3.dp,
+                    vertical = 4.dp
+                ),
         ) {
-            Row{
+            Row {
                 Text(
                     text = name,
                     fontSize = 8.sp,
@@ -92,10 +95,12 @@ fun SpeakerCard(
                 )
             }
             Row {
-                IconButton(onClick = {}){
-                    Icon(painter = painterResource(speakerToRend.speaker),
+                IconButton(onClick = {}) {
+                    Icon(
+                        painter = painterResource(speakerToRend.speaker),
                         contentDescription = stringResource(R.string.speaker),
-                        modifier = Modifier.size(45.dp))
+                        modifier = Modifier.size(45.dp)
+                    )
                 }
             }
             Row {
@@ -121,8 +126,10 @@ fun SpeakerCard(
             ) {
 
                 IconButton(onClick = { /*TODO*/ }) {
-                    Icon(painter = painterResource(speakerToRend.prev),
-                        contentDescription = null)
+                    Icon(
+                        painter = painterResource(speakerToRend.prev),
+                        contentDescription = null
+                    )
                 }
                 IconButton(
                     onClick = { /*TODO*/ }
@@ -133,7 +140,8 @@ fun SpeakerCard(
                     )
                 }
                 IconButton(onClick = { /*TODO*/ }) {
-                    Icon(painter = painterResource(speakerToRend.next),
+                    Icon(
+                        painter = painterResource(speakerToRend.next),
                         contentDescription = null
                     )
                 }
@@ -147,7 +155,7 @@ fun SpeakerCard(
         }
     }
 
-    if (dialogOpen.value){
+    if (dialogOpen.value) {
         Dialog(onDismissRequest = { dialogOpen.value = false }) {
             Surface(
                 modifier = Modifier
@@ -156,26 +164,27 @@ fun SpeakerCard(
                 shape = MaterialTheme.shapes.large,
                 tonalElevation = AlertDialogDefaults.TonalElevation
             ) {
-                Column(modifier = Modifier.padding(16.dp),
+                Column(
+                    modifier = Modifier.padding(16.dp),
                 ) {
-                    Row(horizontalArrangement = Arrangement.SpaceEvenly
-                    ){
-                       TextButton(onClick = { /*TODO*/ }
-                       ) {
-                           Icon(painter = painterResource(id = R.drawable.baseline_playlist_play_24),
-                               contentDescription = null)
-                           Text(text = stringResource(actions.playlist))
-                       }
-                        TextButton(onClick = { /*TODO*/ }
-                        ) {
-                            Icon(painter = painterResource(id = R.drawable.baseline_music_note_24),
-                                contentDescription = null)
-                            Text(text = stringResource(actions.genre))
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        LazyRow() {
+                            itemsIndexed(items = actions) { index: Int, item: String ->
+                                TextButton(onClick = { /*TODO*/ }) {
+                                    Icon(
+                                        painter = painterResource(actionIcons[index]),
+                                        contentDescription = null
+                                    )
+                                    Text(text = item)
+
+                                }
+                            }
                         }
-                    }
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Row(verticalAlignment = Alignment.Bottom){
-                        TextButton(
+                        Spacer(modifier = Modifier.height(24.dp))
+                        Row(verticalAlignment = Alignment.Bottom) {
+                            TextButton(
                                 onClick = {
                                     dialogOpen.value = false
                                 },
@@ -184,6 +193,7 @@ fun SpeakerCard(
                             }
                         }
                     }
+                }
             }
         }
     }
