@@ -103,5 +103,7 @@
         <item>@string/dispense</item>
     </string-array>
 
+    <string name="confirmation">Confirm</string>
+
 
 </resources>

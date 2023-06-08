@@ -86,4 +86,5 @@
     <string-array name="faucet_functions">
         <item>@string/dispense</item>
     </string-array>
+    <string name="confirmation">Aceptar</string>
 </resources>
