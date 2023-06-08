@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
 
 
@@ -23,7 +24,9 @@ private val devices = listOf(
 fun renderDevices(
     //modifier: Modifier = Modifier
 ){
+
     LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)){
         items(items = devices){item -> SpeakerCard(name = item) }
+
     }
 }

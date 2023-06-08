@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -60,10 +63,15 @@ fun SpeakerCard(
     modifier: Modifier = Modifier,
     speakerToRend: SpeakerIcons = SpeakerIcons(),
     actions: SpeakerStringActions = SpeakerStringActions(),
-    //genres: SpeakerGenres = SpeakerGenres()
+    genres: Array<String> = stringArrayResource(id = R.array.genres)
 ){
     val dialogOpen = remember {
         mutableStateOf(false)
+    }
+    LazyColumn(){
+        itemsIndexed(items = genres){
+            index,item ->
+        }
     }
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -138,6 +146,7 @@ fun SpeakerCard(
             }
         }
     }
+
     if (dialogOpen.value){
         Dialog(onDismissRequest = { dialogOpen.value = false }) {
             Surface(
