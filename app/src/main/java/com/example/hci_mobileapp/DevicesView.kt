@@ -23,7 +23,7 @@ private val devices = listOf(
 fun renderDevices(
     //modifier: Modifier = Modifier
 ){
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp),){
+    LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)){
         items(items = devices){item -> SpeakerCard(name = item) }
     }
 }

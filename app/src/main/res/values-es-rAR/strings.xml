@@ -24,4 +24,66 @@
     <string name="faucet">Grifo</string>
     <string name="dispense">Dispensar</string>
     <string name="automatic">Automático</string>
+
+    <!--- Apply to several devices -->
+    <string-array name="power">
+        <item>@string/On</item>
+        <item>@string/Off</item>
+    </string-array>
+    <!-- Apply to speaker -->
+    <string-array name="speaker_functions">
+        <item>@string/playlist</item>
+        <item>@string/genre</item>
+    </string-array>
+    <string-array name="genres">
+        <item>@string/classic</item>
+        <item>@string/dance</item>
+        <item>@string/pop</item>
+        <item>@string/country</item>
+        <item>@string/rock</item>
+    </string-array>
+    <!-- Apply to lamp -->
+    <string-array name="lamp_functions">
+        <item>@string/change_color</item>
+        <item>@string/intensity</item>
+    </string-array>
+    <!-- Apply to AC -->
+    <string-array name="ac_functions">
+        <item>@string/vertical_swing</item>
+        <item>@string/horizontal_swing</item>
+        <item>@string/fan_speed</item>
+        <item>@string/mode</item>
+    </string-array>
+    <string-array name="ac_modes">
+        <item>@string/hot</item>
+        <item>@string/cold</item>
+        <item>@string/ventilation</item>
+    </string-array>
+    <string-array name="vertical_values">
+        <item>@string/automatic</item>
+        <item>22</item>
+        <item>45</item>
+        <item>67</item>
+        <item>90</item>
+    </string-array>
+    <string-array name="horizontal_values">
+        <item>@string/automatic</item>
+        <item>-90</item>
+        <item>-45</item>
+        <item>45</item>
+        <item>90</item>
+    </string-array>
+    <!-- Apply to Fridge -->
+    <string-array name="fridge_functions">
+        <item>@string/mode</item>
+    </string-array>
+    <string-array name="fride_modes">
+        <item>@string/party</item>
+        <item>@string/vacation</item>
+        <item>@string/normal</item>
+    </string-array>
+    <!-- Apply to Faucet -->
+    <string-array name="faucet_functions">
+        <item>@string/dispense</item>
+    </string-array>
 </resources>

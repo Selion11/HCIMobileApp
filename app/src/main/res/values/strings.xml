@@ -50,6 +50,7 @@
         <item>@string/playlist</item>
         <item>@string/genre</item>
     </string-array>
+
     <string-array name="genres">
         <item>@string/classic</item>
         <item>@string/dance</item>
