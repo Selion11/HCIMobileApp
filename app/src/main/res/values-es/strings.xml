@@ -31,10 +31,6 @@
         <item>@string/Off</item>
     </string-array>
     <!-- Apply to speaker -->
-    <string-array name="speaker_functions">
-        <item>@string/playlist</item>
-        <item>@string/genre</item>
-    </string-array>
     <string-array name="genres">
         <item>@string/classic</item>
         <item>@string/dance</item>
@@ -74,10 +70,7 @@
         <item>90</item>
     </string-array>
     <!-- Apply to Fridge -->
-    <string-array name="fridge_functions">
-        <item>@string/mode</item>
-    </string-array>
-    <string-array name="fride_modes">
+    <string-array name="fridge_modes">
         <item>@string/party</item>
         <item>@string/vacation</item>
         <item>@string/normal</item>
@@ -87,4 +80,5 @@
         <item>@string/dispense</item>
     </string-array>
     <string name="confirmation">Aceptar</string>
+    <string name="modeMSG">Porfavor selccione un modo para su heladera :</string>
 </resources>

@@ -93,7 +93,7 @@
     <string-array name="fridge_functions">
         <item>@string/mode</item>
     </string-array>
-    <string-array name="fride_modes">
+    <string-array name="fridge_modes">
         <item>@string/party</item>
         <item>@string/vacation</item>
         <item>@string/normal</item>
@@ -104,6 +104,7 @@
     </string-array>
 
     <string name="confirmation">Confirm</string>
+    <string name="modeMSG">Select a mode for your fridge :</string>
 
 
 </resources>
