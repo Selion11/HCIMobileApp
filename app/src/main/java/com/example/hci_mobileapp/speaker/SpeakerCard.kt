@@ -1,7 +1,5 @@
-package com.example.hci_mobileapp
+package com.example.hci_mobileapp.speaker
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,7 +12,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -23,14 +20,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -39,12 +33,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hci_mobileapp.R
 
 @Composable
-fun SpeakerCard(speakerViewModel: SpeakerViewModel = viewModel()){
+fun SpeakerCard(
+    speakerViewModel: SpeakerViewModel = viewModel(),
+    name: String
+    ){
     val speakerUiState = speakerViewModel.uiState.collectAsState()
 
+    val genDialog = remember { mutableStateOf(false) }
+
     val openDialog = remember { mutableStateOf(false) }
+
+    speakerViewModel.nameSet(name)
+    speakerViewModel.turnOnOff()
+
+    val genres = stringArrayResource(speakerUiState.value.genres)
 
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -151,7 +156,7 @@ fun SpeakerCard(speakerViewModel: SpeakerViewModel = viewModel()){
                             )
                             Text(text = stringResource(speakerUiState.value.actions.plist))
                         }
-                        TextButton(onClick = { /*genresOpen.value = true*/ }
+                        TextButton(onClick = { genDialog.value = true }
                         ) {
                             Icon(
                                 painter = painterResource(speakerUiState.value.icons.genres),
@@ -174,12 +179,10 @@ fun SpeakerCard(speakerViewModel: SpeakerViewModel = viewModel()){
             }
         }
     }
-}
 
-/*
-    if (genresOpen.value) {
+    if (genDialog.value) {
         Dialog(
-            onDismissRequest = { genresOpen.value = false }
+            onDismissRequest = { genDialog.value = false }
         ) {
             Surface(
                 modifier = Modifier
@@ -189,11 +192,10 @@ fun SpeakerCard(speakerViewModel: SpeakerViewModel = viewModel()){
                 tonalElevation = AlertDialogDefaults.TonalElevation
             ) {
                 Row() {
-                    LazyRow(){
-                        items(items = genres){
-                                item ->
+                    LazyRow() {
+                        items(items = genres) { item ->
                             TextButton(
-                                onClick = { gen.value = item },
+                                onClick = { speakerViewModel.genreSet(item) },
                                 modifier = Modifier.padding(start = 1.dp, end = 1.dp)
                             ) {
                                 Text(item)
@@ -204,7 +206,7 @@ fun SpeakerCard(speakerViewModel: SpeakerViewModel = viewModel()){
                 Row(verticalAlignment = Alignment.Bottom) {
                     TextButton(
                         onClick = {
-                            genresOpen.value = false
+                            genDialog.value = false
                         },
                     ) {
                         Text(stringResource(id = R.string.confirmation))
@@ -215,10 +217,12 @@ fun SpeakerCard(speakerViewModel: SpeakerViewModel = viewModel()){
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+
+
 @Preview
 @Composable
 fun CardPrev(){
     SpeakerCard(name = "Hello World")
 }
-*/
+
