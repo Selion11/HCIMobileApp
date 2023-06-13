@@ -50,7 +50,6 @@ data class FridgeActions(
 fun FridgeCard(
     name : String,
     fridgeToRend: FridgeIcons = FridgeIcons(),
-    actions: FridgeActions = FridgeActions(),
     modes: Array<String> = stringArrayResource(id = R.array.fridge_modes)
 ){
 val dialogOpen = remember {
@@ -206,8 +205,9 @@ if (modesOpen.value) {
     }
 }
 
+/*
 @Preview
 @Composable
 fun CardPrev(){
     FridgeCard(name = "Hello World")
-}
+}*/

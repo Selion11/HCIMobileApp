@@ -88,7 +88,7 @@ fun TopNavigation(){
                         .padding(horizontal = 5.dp))
                 }
             }
-        }
+}
 
 @Composable
 fun dummyView(){
