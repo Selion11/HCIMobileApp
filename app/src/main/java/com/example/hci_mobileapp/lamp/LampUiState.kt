@@ -21,7 +21,7 @@ data class LampUiState(
     val name: String = " ",
     val icons: LampIcons = LampIcons(),
     val actions: LampActions = LampActions(),
-    val state: Int = 0,
+    val state: Int = R.string.Off,
     @ColorLong val col: Long = 0x000000,
     val intensity: Float = 5f
 )

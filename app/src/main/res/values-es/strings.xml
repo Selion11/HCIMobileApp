@@ -79,6 +79,16 @@
     <string-array name="faucet_functions">
         <item>@string/dispense</item>
     </string-array>
+    <string-array name="units">
+        <item>@string/ml</item>
+        <item>@string/cl</item>
+        <item>@string/dl</item>
+        <item>@string/l</item>
+        <item>@string/dal</item>
+        <item>@string/hl</item>
+        <item>@string/kl</item>
+    </string-array>
+
     <string name="confirmation">Aceptar</string>
     <string name="modeMSG">Porfavor selccione un modo para su heladera :</string>
 </resources>

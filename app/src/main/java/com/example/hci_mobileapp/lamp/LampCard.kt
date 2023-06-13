@@ -1,7 +1,5 @@
 package com.example.hci_mobileapp.lamp
 
-import android.util.Range
-import androidx.annotation.IntRange
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,19 +37,13 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun LampCard(
     lampViewModel: LampViewModel = viewModel(),
-    name: String,
+    name: String
 ){
     val lampUiState = lampViewModel.uiState.collectAsState()
 
     lampViewModel.nameSet(name)
-    lampViewModel.TurnOnOff()
-
-    var sliderPos by remember { mutableStateOf(0f) }
 
     val intensityDialog = remember { mutableStateOf(false) }
-
-    val turnOnOff = remember { mutableStateOf(false) }
-
 
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -73,7 +65,7 @@ fun LampCard(
                 )
             }
             Row {
-                IconButton(onClick = { turnOnOff.value = true }) {
+                IconButton(onClick = {lampViewModel.turnOnOff() }) {
                     Icon(
                         painter = painterResource(lampViewModel.iconSelection()),
                         contentDescription = stringResource(R.string.lamp),
@@ -97,7 +89,8 @@ fun LampCard(
 
                 IconButton(onClick = {/* Open dialog and picker to select value
                       send that value to color set*/  },
-                    enabled = lampUiState.value.state.equals(R.string.On)) {
+                    enabled = lampUiState.value.state == R.string.On
+                ) {
                     Icon(
                         painter = painterResource(lampUiState.value.icons.colorPicker),
                         contentDescription = null
@@ -105,7 +98,7 @@ fun LampCard(
                 }
                 IconButton(
                     onClick = { intensityDialog.value = true },
-                    enabled = lampUiState.value.state.equals(R.string.On)
+                    enabled = lampUiState.value.state == R.string.On
                 ) {
                     Icon(
                         painter = painterResource(lampUiState.value.icons.intense),
@@ -114,11 +107,6 @@ fun LampCard(
                 }
             }
         }
-    }
-
-    if(turnOnOff.value){
-        lampViewModel.TurnOnOff()
-        turnOnOff.value = false
     }
 
     if(intensityDialog.value){
@@ -166,8 +154,10 @@ fun LampCard(
      }
 }
 
+/*
 @Preview
 @Composable
 fun prev(){
     LampCard(name = "juenaso")
 }
+*/

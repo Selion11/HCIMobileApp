@@ -8,6 +8,14 @@
     <string name="lamp">Lamp</string>
     <string name="faucet">Faucet</string>
 
+    <string name="ml" translatable="false">ml</string>
+    <string name="cl" translatable="false">cl</string>
+    <string name="dl" translatable="false">dl</string>
+    <string name="l" translatable="false">l</string>
+    <string name="dal" translatable="false">dal</string>
+    <string name="hl" translatable="false">hl</string>
+    <string name="kl" translatable="false">kl</string>
+
     <!--- Apply to several devices -->
     <string name="On">ON</string>
     <string name="Off">OFF</string>
@@ -98,6 +106,15 @@
     <!-- Apply to Faucet -->
     <string-array name="faucet_functions">
         <item>@string/dispense</item>
+    </string-array>
+    <string-array name="units">
+        <item>@string/ml</item>
+        <item>@string/cl</item>
+        <item>@string/dl</item>
+        <item>@string/l</item>
+        <item>@string/dal</item>
+        <item>@string/hl</item>
+        <item>@string/kl</item>
     </string-array>
 
     <string name="confirmation">Confirm</string>

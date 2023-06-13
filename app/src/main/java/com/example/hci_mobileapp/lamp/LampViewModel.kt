@@ -1,7 +1,6 @@
 package com.example.hci_mobileapp.lamp
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import com.example.hci_mobileapp.R
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +10,6 @@ import kotlinx.coroutines.flow.update
 
 class LampViewModel: ViewModel() {
     private val _lampUiState = MutableStateFlow(LampUiState())
-
 
     val uiState: StateFlow<LampUiState> = _lampUiState.asStateFlow()
 
@@ -29,8 +27,8 @@ class LampViewModel: ViewModel() {
             R.drawable.baseline_lightbulb_24
     }
 
-    @Composable
-    fun TurnOnOff(){
+
+    fun turnOnOff(){
         _lampUiState.update { currentState ->
             if (uiState.value.state == (R.string.Off))
                 currentState.copy(state =  R.string.On)
