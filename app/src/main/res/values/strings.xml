@@ -119,6 +119,9 @@
 
     <string name="confirmation">Confirm</string>
     <string name="modeMSG">Select a mode for your fridge :</string>
+    <string name="txt_field_disp">Select ammount to dispense</string>
+    <string name="suppFaucet">Insert a number higher than 0</string>
+    <string name="units">Units</string>
 
 
 </resources>

@@ -91,4 +91,7 @@
 
     <string name="confirmation">Aceptar</string>
     <string name="modeMSG">Porfavor selccione un modo para su heladera :</string>
+    <string name="txt_field_disp">Seleccione cuanto dispensar</string>
+    <string name="suppFaucet">Ingrese un numero mayor a 0</string>
+    <string name="units">Unidades</string>
 </resources>

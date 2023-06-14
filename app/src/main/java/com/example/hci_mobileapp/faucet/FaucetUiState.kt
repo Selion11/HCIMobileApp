@@ -13,7 +13,9 @@ data class FaucetIcons(
 )
 
 data class FaucetActions(
-    @StringRes val dispense: Int = R.string.dispense
+    @StringRes val dispense: Int = R.string.dispense,
+    @StringRes val msg: Int = R.string.txt_field_disp,
+    @StringRes val supp: Int = R.string.suppFaucet
 )
 
 data class FaucetUiState (
@@ -21,5 +23,6 @@ data class FaucetUiState (
     val icons: FaucetIcons = FaucetIcons(),
     val actions: FaucetActions = FaucetActions(),
     @ArrayRes val units: Int = R.array.units,
+    val dispenseUnits: String = " ",
     val state: Int = R.string.Off
 )
