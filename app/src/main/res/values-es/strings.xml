@@ -90,8 +90,10 @@
     </string-array>
 
     <string name="confirmation">Aceptar</string>
-    <string name="modeMSG">Porfavor selccione un modo para su heladera :</string>
+    <string name="modeMSG">Porfavor selccione un modo para su dispositivo :</string>
     <string name="txt_field_disp">Seleccione cuanto dispensar</string>
     <string name="suppFaucet">Ingrese un numero mayor a 0</string>
     <string name="units">Unidades</string>
+    <string name="horSwingMSg">Selccione un balanceo horizontal</string>
+    <string name="vertSwingMsg">Selccione un balanceo vertical</string>
 </resources>

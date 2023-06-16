@@ -7,8 +7,6 @@ import com.example.hci_mobileapp.R
 
 
 data class FaucetIcons(
-    @DrawableRes val faucetOn: Int = R.drawable.baseline_water_drop_24,
-    @DrawableRes val faucetOff: Int = R.drawable.outline_water_drop_24,
     @DrawableRes val disp: Int = R.drawable.dispense
 )
 

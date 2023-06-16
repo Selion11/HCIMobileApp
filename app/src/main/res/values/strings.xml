@@ -111,17 +111,19 @@
         <item>@string/ml</item>
         <item>@string/cl</item>
         <item>@string/dl</item>
-        <item>@string/l</item>
+        <item>@string/l</item>a
         <item>@string/dal</item>
         <item>@string/hl</item>
         <item>@string/kl</item>
     </string-array>
 
     <string name="confirmation">Confirm</string>
-    <string name="modeMSG">Select a mode for your fridge :</string>
+    <string name="modeMSG">Select a mode for your device :</string>
     <string name="txt_field_disp">Select ammount to dispense</string>
     <string name="suppFaucet">Insert a number higher than 0</string>
     <string name="units">Units</string>
+    <string name="horSwingMSg">Select a horizontal swing</string>
+    <string name="vertSwingMsg">Select a vertical swing</string>
 
 
 </resources>
