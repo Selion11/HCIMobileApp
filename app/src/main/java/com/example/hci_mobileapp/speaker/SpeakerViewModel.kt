@@ -3,6 +3,7 @@ package com.example.hci_mobileapp.speaker
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.data.network.RetrofitClient
+import com.example.hci_mobileapp.data.network.model.Song
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,7 +51,7 @@ class SpeakerViewModel : ViewModel() {
         }
         postJob = viewModelScope.launch {
             runCatching {
-                RetrofitClient.getApiService().doAction(
+                RetrofitClient.getApiService().doActionBool(
                     actionName = action.toString(),
                     deviceID = uiState.value.id
                 )
@@ -60,56 +61,71 @@ class SpeakerViewModel : ViewModel() {
         }
     }
 
-    fun nextSong(){
-        action = "nextSong"
+    fun getPlaylist() {
         postJob = viewModelScope.launch {
             runCatching {
-                RetrofitClient.getApiService().doAction(
+                RetrofitClient.getApiService().speakerPLaylistGet(
                     actionName = action.toString(),
                     deviceID = uiState.value.id
                 )
-            }.onFailure {
-                /*Thorw Notification to user*/
+            }.onSuccess {response ->
+                _speakerUiState.update { currentstate ->
+                    currentstate.copy(playList = response.body()?.result)
+                }
             }
         }
     }
 
-    fun prevSong(){
-        action = "previousSong"
-        postJob = viewModelScope.launch {
-            runCatching {
-                RetrofitClient.getApiService().doAction(
-                    actionName = action.toString(),
-                    deviceID = uiState.value.id
-                )
-            }.onFailure {
-                /*Thorw Notification to user*/
+        fun nextSong() {
+            action = "nextSong"
+            postJob = viewModelScope.launch {
+                runCatching {
+                    RetrofitClient.getApiService().doActionBool(
+                        actionName = action.toString(),
+                        deviceID = uiState.value.id
+                    )
+                }.onFailure {
+                    /*Thorw Notification to user*/
+                }
             }
         }
-    }
 
-    fun stop(){
-        _speakerUiState.update { currentState ->
-            currentState.copy(state = "Stopped")
-        }
-        action = "stop"
-        postJob = viewModelScope.launch {
-            runCatching {
-                RetrofitClient.getApiService().doAction(
-                    actionName = action.toString(),
-                    deviceID = uiState.value.id
-                )
-            }.onFailure {
-                /*Thorw Notification to user*/
+        fun prevSong() {
+            action = "previousSong"
+            postJob = viewModelScope.launch {
+                runCatching {
+                    RetrofitClient.getApiService().doActionBool(
+                        actionName = action.toString(),
+                        deviceID = uiState.value.id
+                    )
+                }.onFailure {
+                    /*Thorw Notification to user*/
+                }
             }
         }
-    }
 
-
-    fun genreSet(genre: String) {
-        _speakerUiState.update { currentState ->
-            currentState.copy(currGen = genre)
-
+        fun stop() {
+            _speakerUiState.update { currentState ->
+                currentState.copy(state = "Stopped")
+            }
+            action = "stop"
+            postJob = viewModelScope.launch {
+                runCatching {
+                    RetrofitClient.getApiService().doActionBool(
+                        actionName = action.toString(),
+                        deviceID = uiState.value.id
+                    )
+                }.onFailure {
+                    /*Thorw Notification to user*/
+                }
+            }
         }
-    }
+
+
+        fun genreSet(genre: String) {
+            _speakerUiState.update { currentState ->
+                currentState.copy(currGen = genre)
+
+            }
+        }
 }

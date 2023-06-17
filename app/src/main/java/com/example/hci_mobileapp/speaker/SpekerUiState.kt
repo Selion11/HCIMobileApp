@@ -4,6 +4,7 @@ import androidx.annotation.ArrayRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.example.hci_mobileapp.R
+import com.example.hci_mobileapp.data.network.model.Song
 
 data class SpeakerIcons(
     @DrawableRes val speaker: Int = R.drawable.baseline_speaker_24,
@@ -29,6 +30,7 @@ data class SpeakerUiState (
     val name : String = " ",
     val id: String =  " ",
     val state: String = "Paused",
+    val playList: List<Song>? = null,
     @ArrayRes val genres: Int = R.array.genres,
     val currGen: String = " "
 )

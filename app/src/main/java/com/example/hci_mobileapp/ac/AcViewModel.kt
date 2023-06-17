@@ -82,7 +82,7 @@ class AcViewModel : ViewModel(){
             "turnOn"
         postJob = viewModelScope.launch {
             runCatching {
-                RetrofitClient.getApiService().doAction(
+                RetrofitClient.getApiService().doActionBool(
                     actionName = action.toString(),
                     deviceID = uiState.value.id)
             }.onFailure {
