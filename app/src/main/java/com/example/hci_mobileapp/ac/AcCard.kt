@@ -35,24 +35,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Device
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.R
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AcCard(
     acViewModel: AcViewModel = viewModel(),
-    name:String,
-    id: String
+    data: ApiDevice
 ) {
     val acUiState = acViewModel.uiState.collectAsState()
 
-    acViewModel.nameSet(name)
-    acViewModel.idSet(id)
+    acViewModel.nameSet(data.name?: "")
+    acViewModel.idSet(data.id?: "")
 
     var modeDialog = remember {
         mutableStateOf(false)
@@ -322,8 +323,9 @@ fun AcCard(
     }
 }
 
+/*
 @Composable
 @Preview
 fun acPrev(){
     AcCard(name ="juan", id = "11")
-}
+}*/

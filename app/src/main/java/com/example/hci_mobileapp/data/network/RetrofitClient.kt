@@ -23,4 +23,8 @@ object RetrofitClient {
             .client(okHttpClient)
             .build()
     }
+
+    fun getApiService() : ApiService{
+        return retrofit.create(ApiService::class.java)
+    }
 }
