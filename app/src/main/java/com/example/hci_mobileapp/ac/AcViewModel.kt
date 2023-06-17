@@ -5,18 +5,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
+import com.example.hci_mobileapp.data.network.RetrofitClient
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class AcViewModel : ViewModel(){
     private val _acUiState = MutableStateFlow(AcUiState())
 
     val uiState: StateFlow<AcUiState> = _acUiState.asStateFlow()
 
+    private var postJob: Job? = null
+
+    private var action: String? = null
+
     fun nameSet(nameToChange: String) {
+        postJob?.cancel()
+
         _acUiState.update { currentState ->
             currentState.copy(name = nameToChange)
         }
@@ -65,6 +75,19 @@ class AcViewModel : ViewModel(){
                 currentState.copy(state =  R.string.On)
             else
                 currentState.copy(state =  R.string.Off)
+        }
+        action = if(uiState.value.state ==(R.string.Off)){
+            "turnOff"
+        }else
+            "turnOn"
+        postJob = viewModelScope.launch {
+            runCatching {
+                RetrofitClient.getApiService().doAction(
+                    actionName = action.toString(),
+                    deviceID = uiState.value.id)
+            }.onFailure {
+                /*Thorw Notification to user*/
+            }
         }
     }
 }

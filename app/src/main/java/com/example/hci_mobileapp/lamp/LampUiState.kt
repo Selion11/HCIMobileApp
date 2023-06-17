@@ -19,6 +19,7 @@ data class LampActions(
 
 data class LampUiState(
     val name: String = " ",
+    val id: String = " ",
     val icons: LampIcons = LampIcons(),
     val actions: LampActions = LampActions(),
     val state: Int = R.string.Off,

@@ -38,17 +38,19 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.R
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FaucetCard(
     faucetViewModel: FacuetViewModel = viewModel(),
-    name: String
+   data: ApiDevice
 ){
     val faucetUiState = faucetViewModel.uiState.collectAsState()
 
-    faucetViewModel.nameSet(name)
+    faucetViewModel.nameSet(data.name.toString())
+    faucetViewModel.setId(data.id.toString())
     
     var dispVal by remember { mutableStateOf("0") }
     
@@ -198,8 +200,10 @@ fun FaucetCard(
     } 
 }
 
+/*
 @Preview
 @Composable
 fun prevFau(){
     FaucetCard(name = "Maria")
 }
+*/

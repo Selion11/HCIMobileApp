@@ -17,6 +17,7 @@ data class FridgeActions(
 )
 
 data class FridgeUiState (
+    val id: String = " ",
     val icons: FridgeIcons = FridgeIcons(),
     val actions: FridgeActions = FridgeActions(),
     val name: String = " ",

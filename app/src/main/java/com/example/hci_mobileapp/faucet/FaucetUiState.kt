@@ -18,6 +18,7 @@ data class FaucetActions(
 
 data class FaucetUiState (
     val name: String = " ",
+    val id: String = " ",
     val icons: FaucetIcons = FaucetIcons(),
     val actions: FaucetActions = FaucetActions(),
     @ArrayRes val units: Int = R.array.units,

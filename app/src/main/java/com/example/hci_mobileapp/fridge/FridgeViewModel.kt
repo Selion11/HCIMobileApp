@@ -18,6 +18,12 @@ class FridgeViewModel : ViewModel() {
         }
     }
 
+    fun setid(ID: String){
+        _fridgeUiState.update { currentState ->
+            currentState.copy(id = ID)
+        }
+    }
+
     fun modeSet(modeToSet: String){
         _fridgeUiState.update { currentState ->
             currentState.copy(curMode = modeToSet)

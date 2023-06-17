@@ -1,12 +1,14 @@
 package com.example.hci_mobileapp.data.network
 
 import com.example.hci_mobileapp.data.network.model.AllDevices
-import com.example.hci_mobileapp.data.network.model.ApiDevice
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 
-interface ApiService {
-    @GET("/devices")
+interface ApiService{
+    @GET("/api/devices")
     suspend fun getAllDevices() : Response<AllDevices>
 
   /*  @GET("/devices/events")
@@ -15,4 +17,10 @@ interface ApiService {
     @GET("/devices")
     suspend fun getDevice(@Query("deviceId")deviceId: String) : Response<>
 */
+    @POST("/api/devices/{deviceID}/{actionName}")
+    suspend fun doAction(
+      @Path("actionName") actionName: String,
+      @Path("deviceID") deviceID: String,
+      //@Body  Gson().toJson(deviceObject)
+  ) : Response<Boolean>
 }

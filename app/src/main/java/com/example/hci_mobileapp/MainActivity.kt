@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
 import androidx.navigation.*
+import com.example.hci_mobileapp.devicesView.DevicesViewModel
 import com.example.hci_mobileapp.devicesView.renderDevices
 import com.example.hci_mobileapp.ui.theme.HCIMobileAppTheme
 
@@ -58,7 +59,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BottomBar(navController: NavHostController) {
-    val select = remember{ mutableStateOf(1) }
     val items = listOf(
         SmartHomeScreens.RecentScreen,
         SmartHomeScreens.DeviceScreen
@@ -86,36 +86,6 @@ fun BottomBar(navController: NavHostController) {
             )
         }
     }
-    Column() {
-        TextButton(
-            onClick = {select.value = 1 },
-            border = BorderStroke(width = 2.dp, color = Color.Black),
-            modifier = Modifier
-                .padding(start = 10.dp),
-            shape = MaterialTheme.shapes.medium
-            ) {
-            Icon(painter = painterResource(R.drawable.baseline_home_24),
-                contentDescription = null,
-                tint = Color.Black,
-            )
-        }
-    }
-    Column(
-        modifier = Modifier
-            .padding(start= 215.dp)
-    ) {
-        TextButton(
-            onClick = { select.value = 2 },
-            border = BorderStroke(width = 2.dp, color = Color.Black),
-            shape = MaterialTheme.shapes.medium
-           ) {
-            Icon(painter = painterResource(R.drawable.baseline_devices_24),
-                contentDescription = null,
-                tint = Color.Black,
-                modifier = Modifier
-                    .padding(horizontal = 5.dp))
-            }
-        }
 }
 
 @Composable
@@ -127,10 +97,3 @@ fun dummyView(){
         renderDevices()
     }
 }
-@Preview
-@Composable
-fun topPrev(){
-    val navController = rememberNavController()
-   BottomBar(navController = navController)
-}
-

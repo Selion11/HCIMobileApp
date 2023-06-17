@@ -2,16 +2,24 @@ package com.example.hci_mobileapp.lamp
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
+import com.example.hci_mobileapp.data.network.RetrofitClient
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class LampViewModel: ViewModel() {
     private val _lampUiState = MutableStateFlow(LampUiState())
 
     val uiState: StateFlow<LampUiState> = _lampUiState.asStateFlow()
+
+    private var postJob: Job? = null
+
+    private var action: String? = null
 
     fun nameSet(nameToChange: String){
         _lampUiState.update { currentState ->
@@ -19,6 +27,11 @@ class LampViewModel: ViewModel() {
         }
     }
 
+    fun setid(ID: String){
+        _lampUiState.update { currentState ->
+            currentState.copy(id = ID)
+        }
+    }
 
     fun iconSelection(): Int {
         return if (uiState.value.state == R.string.Off) {
@@ -34,6 +47,20 @@ class LampViewModel: ViewModel() {
                 currentState.copy(state =  R.string.On)
             else
                 currentState.copy(state =  R.string.Off)
+        }
+
+        action = if(uiState.value.state ==(R.string.Off)){
+            "turnOff"
+        }else
+            "turnOn"
+        postJob = viewModelScope.launch {
+            runCatching {
+                RetrofitClient.getApiService().doAction(
+                    actionName = action.toString(),
+                    deviceID = uiState.value.id)
+            }.onFailure {
+                /*Thorw Notification to user*/
+            }
         }
     }
 

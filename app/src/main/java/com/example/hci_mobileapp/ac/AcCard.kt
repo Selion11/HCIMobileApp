@@ -52,8 +52,8 @@ fun AcCard(
 ) {
     val acUiState = acViewModel.uiState.collectAsState()
 
-    acViewModel.nameSet(data.name?: "")
-    acViewModel.idSet(data.id?: "")
+    acViewModel.nameSet(data.name.toString())
+    acViewModel.idSet(data.id.toString())
 
     var modeDialog = remember {
         mutableStateOf(false)

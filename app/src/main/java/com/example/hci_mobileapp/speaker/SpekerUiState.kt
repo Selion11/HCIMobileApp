@@ -12,7 +12,9 @@ data class SpeakerIcons(
     @DrawableRes val prev: Int = R.drawable.baseline_skip_previous_24,
     @DrawableRes val more: Int = R.drawable.baseline_more_vert_24,
     @DrawableRes val playList: Int = R.drawable.baseline_playlist_play_24,
-    @DrawableRes val genres: Int = R.drawable.baseline_music_note_24
+    @DrawableRes val genres: Int = R.drawable.baseline_music_note_24,
+    @DrawableRes val stop: Int = R.drawable.stop,
+    @DrawableRes val pause: Int = R.drawable.pause
 
 )
 
@@ -25,7 +27,8 @@ data class SpeakerUiState (
     val icons: SpeakerIcons = SpeakerIcons(),
     val actions: SpeakerActions = SpeakerActions(),
     val name : String = " ",
+    val id: String =  " ",
+    val state: String = "Paused",
     @ArrayRes val genres: Int = R.array.genres,
-    val currGen: String = " ",
-    val state: String = " "
+    val currGen: String = " "
 )

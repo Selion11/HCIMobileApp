@@ -33,15 +33,17 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.R
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 
 @Composable
 fun LampCard(
     lampViewModel: LampViewModel = viewModel(),
-    name: String
+    data: ApiDevice
 ){
     val lampUiState = lampViewModel.uiState.collectAsState()
 
-    lampViewModel.nameSet(name)
+    lampViewModel.nameSet(data.name.toString())
+    lampViewModel.setid(data.id.toString())
 
     val intensityDialog = remember { mutableStateOf(false) }
 

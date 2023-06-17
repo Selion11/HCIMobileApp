@@ -34,11 +34,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.R
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 
 @Composable
 fun SpeakerCard(
     speakerViewModel: SpeakerViewModel = viewModel(),
-    name: String
+    data: ApiDevice
     ){
     val speakerUiState = speakerViewModel.uiState.collectAsState()
 
@@ -46,8 +47,7 @@ fun SpeakerCard(
 
     val openDialog = remember { mutableStateOf(false) }
 
-    speakerViewModel.nameSet(name)
-    speakerViewModel.turnOnOff()
+    speakerViewModel.nameSet(data.name.toString())
 
     val genres = stringArrayResource(speakerUiState.value.genres)
 
@@ -71,13 +71,11 @@ fun SpeakerCard(
                 )
             }
             Row {
-                IconButton(onClick = {}) {
-                    Icon(
-                        painter = painterResource(speakerUiState.value.icons.speaker),
-                        contentDescription = stringResource(R.string.speaker),
-                        modifier = Modifier.size(45.dp)
-                    )
-                }
+                Icon(
+                    painter = painterResource(speakerUiState.value.icons.speaker),
+                    contentDescription = stringResource(R.string.speaker),
+                    modifier = Modifier.size(45.dp)
+                )
             }
             Row {
                 Text(
@@ -101,21 +99,29 @@ fun SpeakerCard(
                     .height(55.dp)
             ) {
 
-                IconButton(onClick = { }) {
+                IconButton(onClick = { speakerViewModel.prevSong() }) {
                     Icon(
                         painter = painterResource(speakerUiState.value.icons.prev),
                         contentDescription = null
                     )
                 }
                 IconButton(
-                    onClick ={ }
+                    onClick ={ speakerViewModel.playPause() }
                 ) {
                     Icon(
-                        painter = painterResource(speakerUiState.value.icons.play),
+                        painter = painterResource(speakerViewModel.iconSelectPlay()),
                         contentDescription = null,
                     )
                 }
-                IconButton(onClick = { }) {
+                IconButton(
+                    onClick ={ speakerViewModel.stop() }
+                ) {
+                    Icon(
+                        painter = painterResource(speakerUiState.value.icons.stop),
+                        contentDescription = null,
+                    )
+                }
+                IconButton(onClick = { speakerViewModel.nextSong() }) {
                     Icon(
                         painter = painterResource(speakerUiState.value.icons.next),
                         contentDescription = null
@@ -220,9 +226,11 @@ fun SpeakerCard(
 
 
 
+/*
 @Preview
 @Composable
 fun CardPrev(){
     SpeakerCard(name = "Hello World")
 }
 
+*/

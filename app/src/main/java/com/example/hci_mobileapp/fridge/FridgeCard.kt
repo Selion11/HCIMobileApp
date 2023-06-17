@@ -33,15 +33,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.R
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 
 
 @Composable
 fun FridgeCard(
     fridgeViewModel: FridgeViewModel = viewModel(),
-    name: String
+    data: ApiDevice
 ){
 
-    Color(color = 33)
+
     val fridgeState = fridgeViewModel.uiState.collectAsState()
 
     val dialogOpen = remember { mutableStateOf(false) }
@@ -50,7 +51,8 @@ fun FridgeCard(
 
     val modes = stringArrayResource(id = fridgeState.value.modes)
 
-    fridgeViewModel.nameSet(name)
+    fridgeViewModel.nameSet(data.name.toString())
+    fridgeViewModel.setid(data.id.toString())
 
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -169,10 +171,12 @@ fun FridgeCard(
 
 
 
+/*
 @Preview
 @Composable
 fun CardPrev(){
     FridgeCard(name = "Ayo")
 }
 
+*/
 
