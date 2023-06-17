@@ -6,12 +6,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ApiService {
-    @GET("/devices")
+/*    @GET("/devices")
     suspend fun getAllDevices() : Response<>
 
     @GET("/devices/events")
     suspend fun getAllEvents() : Response<>
 
     @GET("/devices")
-    suspend fun getDevice(@Query("deviceId")deviceId: String) : Response<>
+    suspend fun getDevice(@Query("deviceId")deviceId: String) : Response<>*/
 }

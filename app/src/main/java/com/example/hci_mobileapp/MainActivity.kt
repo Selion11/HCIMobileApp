@@ -1,7 +1,9 @@
 package com.example.hci_mobileapp
 
-import android.content.Context
-import android.content.SharedPreferences
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,12 +14,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,6 +26,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.*
+import androidx.navigation.*
 import com.example.hci_mobileapp.devicesView.renderDevices
 import com.example.hci_mobileapp.ui.theme.HCIMobileAppTheme
 
@@ -36,12 +37,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             HCIMobileAppTheme {
+                val navController = rememberNavController()
                 // A surface container using the 'background' color from the theme
-                Surface(
+                Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    dummyView()
+                    bottomBar = { BottomBar(navController = navController) },
+                    containerColor = MaterialTheme.colorScheme.secondary
+                ) { paddingValues ->
+                    Surface(
+                        modifier = Modifier.padding(paddingValues),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        SmartHomeNavGraph(navController = navController)
+                    }
                 }
             }
         }
@@ -49,38 +57,65 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TopNavigation(){
+fun BottomBar(navController: NavHostController) {
     val select = remember{ mutableStateOf(1) }
-        Column() {
-            TextButton(
-                onClick = {select.value = 1 },
-                border = BorderStroke(width = 2.dp, color = Color.Black),
+    val items = listOf(
+        SmartHomeScreens.RecentScreen,
+        SmartHomeScreens.DeviceScreen
+    )
+    BottomNavigation {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = navBackStackEntry?.destination?.route
+        items.forEach { item ->
+            BottomNavigationItem(
+                icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
+                label = { Text(text = item.title) },
+                alwaysShowLabel = true,
+                selected = currentRoute == item.route,
+                onClick = {
+                    navController.navigate(item.route) {
+                        navController.graph.startDestinationRoute?.let { screenRoute ->
+                            popUpTo(screenRoute) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    }
+                }
+            )
+        }
+    }
+    Column() {
+        TextButton(
+            onClick = {select.value = 1 },
+            border = BorderStroke(width = 2.dp, color = Color.Black),
+            modifier = Modifier
+                .padding(start = 10.dp),
+            shape = MaterialTheme.shapes.medium
+            ) {
+            Icon(painter = painterResource(R.drawable.baseline_home_24),
+                contentDescription = null,
+                tint = Color.Black,
+            )
+        }
+    }
+    Column(
+        modifier = Modifier
+            .padding(start= 215.dp)
+    ) {
+        TextButton(
+            onClick = { select.value = 2 },
+            border = BorderStroke(width = 2.dp, color = Color.Black),
+            shape = MaterialTheme.shapes.medium
+           ) {
+            Icon(painter = painterResource(R.drawable.baseline_devices_24),
+                contentDescription = null,
+                tint = Color.Black,
                 modifier = Modifier
-                    .padding(start = 10.dp),
-                shape = MaterialTheme.shapes.medium
-                ) {
-                Icon(painter = painterResource(R.drawable.baseline_home_24),
-                    contentDescription = null,
-                    tint = Color.Black,
-                )
+                    .padding(horizontal = 5.dp))
             }
         }
-        Column(
-            modifier = Modifier
-                .padding(start= 215.dp)
-        ) {
-            TextButton(
-                onClick = { select.value = 2 },
-                border = BorderStroke(width = 2.dp, color = Color.Black),
-                shape = MaterialTheme.shapes.medium
-               ) {
-                Icon(painter = painterResource(R.drawable.baseline_devices_24),
-                    contentDescription = null,
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .padding(horizontal = 5.dp))
-                }
-            }
 }
 
 @Composable
@@ -91,13 +126,11 @@ fun dummyView(){
     Row(modifier = Modifier.padding(top= 50.dp), horizontalArrangement = Arrangement.Center) {
         renderDevices()
     }
-    Row(verticalAlignment = Alignment.Bottom) {
-        TopNavigation()
-    }
 }
 @Preview
 @Composable
 fun topPrev(){
-    dummyView()
+    val navController = rememberNavController()
+   BottomBar(navController = navController)
 }
 
