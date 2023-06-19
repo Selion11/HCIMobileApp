@@ -39,6 +39,7 @@ class LampViewModel(device: ApiDevice): ViewModel() {
 
 
     fun turnOnOff(){
+        postJob?.cancel()
         _lampUiState.update { currentState ->
             if (uiState.value.state == (R.string.Off))
                 currentState.copy(state =  R.string.On)
@@ -62,6 +63,7 @@ class LampViewModel(device: ApiDevice): ViewModel() {
     }
 
     fun colorSet(colorToSet: String){
+        postJob?.cancel()
         action = "setColor"
         postJob = viewModelScope.launch {
             runCatching {
@@ -78,6 +80,7 @@ class LampViewModel(device: ApiDevice): ViewModel() {
     }
 
     fun setIntensity(intensity: Int){
+        postJob?.cancel()
         action = "setBrightness"
         postJob = viewModelScope.launch {
             runCatching {

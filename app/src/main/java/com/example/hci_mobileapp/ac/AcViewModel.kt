@@ -39,6 +39,7 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
 
 
     fun setTemp(temp: Int){
+        postJob?.cancel()
         action =  "setTemperature"
         postJob = viewModelScope.launch {
             runCatching {
@@ -65,6 +66,7 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
     }
 
     fun modeSwitch(mode: String){
+        postJob?.cancel()
         action = "setMode"
         postJob = viewModelScope.launch {
            runCatching {
@@ -95,6 +97,7 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
         }
     }
     fun speedChange(speed: String){
+        postJob?.cancel()
         action = "setFanSpeed"
         postJob = viewModelScope.launch {
             runCatching {
@@ -112,6 +115,7 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
     }
 
     fun horiSwingChange(value: String){
+        postJob?.cancel()
         action = "setHorizontalSwing"
         postJob = viewModelScope.launch {
             runCatching {
@@ -133,6 +137,7 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
     }
 
     fun vertSwingChange(value: String){
+        postJob?.cancel()
         action = "setVerticalSwing"
         postJob = viewModelScope.launch {
             runCatching {
@@ -154,6 +159,7 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
     }
 
     fun turnOnOff(){
+        postJob?.cancel()
         _acUiState.update { currentState ->
             if (uiState.value.state == (R.string.Off))
                 currentState.copy(state =  R.string.On)

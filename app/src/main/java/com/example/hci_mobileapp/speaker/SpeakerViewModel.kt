@@ -20,11 +20,11 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     init {
         _speakerUiState.value = SpeakerUiState(
             name = device.name,
-            id=device.id,
+            id= device.id,
             state = "Stopped"
         )
 
-        setVolume(5)
+        _speakerUiState.value.volume?.let { setVolume(it) }
     }
 
 
@@ -43,6 +43,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     }
 
     fun playPause() {
+        postJob?.cancel()
         _speakerUiState.update { currentState ->
             when (uiState.value.state) {
                 "Playing" -> currentState.copy(state = "Paused")
@@ -70,6 +71,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     }
 
     fun setVolume(vol: Int){
+        postJob?.cancel()
         if(vol < 0 || vol > 10){
             //notifs
         }else{
@@ -91,6 +93,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     }
 
     fun getPlaylist() {
+        postJob?.cancel()
         postJob = viewModelScope.launch {
             runCatching {
                 RetrofitClient.getApiService().speakerPLaylistGet(
@@ -106,6 +109,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     }
 
         fun nextSong() {
+            postJob?.cancel()
             action = "nextSong"
             postJob = viewModelScope.launch {
                 runCatching {
@@ -120,6 +124,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
         }
 
         fun prevSong() {
+            postJob?.cancel()
             action = "previousSong"
             postJob = viewModelScope.launch {
                 runCatching {
@@ -134,6 +139,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
         }
 
         fun stop() {
+            postJob?.cancel()
             _speakerUiState.update { currentState ->
                 currentState.copy(state = "Stopped")
             }
@@ -152,6 +158,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
 
         fun genreSet(g: String) {
+            postJob?.cancel()
             action = "setGenre"
             postJob = viewModelScope.launch {
                 kotlin.runCatching {

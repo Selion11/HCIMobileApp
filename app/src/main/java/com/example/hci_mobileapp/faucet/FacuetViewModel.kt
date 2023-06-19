@@ -31,6 +31,7 @@ class FacuetViewModel(device: ApiDevice) : ViewModel() {
     private var action: String? = null
 
     fun dispense(value: Int){
+        postJob?.cancel()
         action = "dispense"
         postJob =  viewModelScope.launch {
             runCatching {
@@ -60,6 +61,7 @@ class FacuetViewModel(device: ApiDevice) : ViewModel() {
 
     fun turnOnOff(){
         /*no voy a cambiar todo por decir open o close muchachos tengamos media neurona*/
+        postJob?.cancel()
         _faucetUiState.update { currentState ->
             if (uiState.value.state == (R.string.Off))
                 currentState.copy(state =  R.string.On)

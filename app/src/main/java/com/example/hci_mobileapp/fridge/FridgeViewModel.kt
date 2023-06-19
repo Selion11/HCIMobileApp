@@ -31,7 +31,7 @@ class FridgeViewModel(device: ApiDevice) : ViewModel() {
 
     fun modeSet(modeToSet: String){
         action = "setMode"
-
+        postJob?.cancel()
         postJob = viewModelScope.launch {
             runCatching {
                 RetrofitClient.getApiService().doActionString(
@@ -59,6 +59,7 @@ class FridgeViewModel(device: ApiDevice) : ViewModel() {
     }
 
     fun setFreezerTemp(temp: Int){
+        postJob?.cancel()
         if(temp < -20 || temp > -8){
             //throw notif
         }else {
@@ -81,6 +82,7 @@ class FridgeViewModel(device: ApiDevice) : ViewModel() {
         }
     }
     fun setTemp(temp: Int){
+        postJob?.cancel()
         if(temp < 2 || temp > 8){
             //throw notif
         }else {
