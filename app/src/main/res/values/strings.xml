@@ -23,7 +23,7 @@
     <!-- Apply to speaker -->
     <string name="genre">Change Genre</string>
     <string name="playlist" translatable="false">Playlist</string>
-    <string name="classic">Classic</string>
+    <string name="classic" translatable="false">Classical</string>
     <string name="country" translatable="false">Country</string>
     <string name="dance" translatable="false">Dance</string>
     <string name="pop" translatable="false">Pop</string>
@@ -35,9 +35,9 @@
     <string name="vertical_swing">Vertical Swing</string>
     <string name="fan_speed">Fan Speed</string>
     <string name="horizontal_swing">Horizontal Swing</string>
-    <string name="hot">Hot</string>
-    <string name="cold">Cold</string>
-    <string name="ventilation">Ventilation</string>
+    <string name="hot">Heat</string>
+    <string name="cold">Cool</string>
+    <string name="ventilation" translatable="false">Fan</string>
     <string name="automatic">Automatic</string>
     <!-- Apply to Fridge -->
     <string name="party">Party</string>
@@ -93,6 +93,13 @@
         <item>-45</item>
         <item>45</item>
         <item>90</item>
+    </string-array>
+    <string-array name="fanSpeeds">
+        <item>@string/automatic</item>
+        <item>25</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
     </string-array>
     <!-- Apply to Fridge -->
     <string-array name="fridge_functions">

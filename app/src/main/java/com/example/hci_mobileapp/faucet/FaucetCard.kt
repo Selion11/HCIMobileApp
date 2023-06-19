@@ -49,8 +49,8 @@ fun FaucetCard(
 ){
     val faucetUiState = faucetViewModel.uiState.collectAsState()
 
-    faucetViewModel.nameSet(data.name.toString())
-    faucetViewModel.setId(data.id.toString())
+    faucetViewModel.nameSet(data.name)
+    faucetViewModel.setId(data.id)
     
     var dispVal by remember { mutableStateOf("0") }
     

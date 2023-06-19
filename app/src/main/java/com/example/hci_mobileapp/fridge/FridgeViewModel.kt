@@ -12,13 +12,15 @@ class FridgeViewModel : ViewModel() {
 
     val uiState: StateFlow<FridgeUiState> = _fridgeUiState.asStateFlow()
 
-    fun nameSet(nameToChange: String){
+    fun nameSet(nameToChange: String?){
+        if(nameToChange != null)
         _fridgeUiState.update { currentState ->
             currentState.copy(name = nameToChange)
         }
     }
 
-    fun setid(ID: String){
+    fun setid(ID: String?){
+        if(ID != null)
         _fridgeUiState.update { currentState ->
             currentState.copy(id = ID)
         }

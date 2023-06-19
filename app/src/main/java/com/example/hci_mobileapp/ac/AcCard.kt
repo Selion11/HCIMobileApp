@@ -2,7 +2,6 @@ package com.example.hci_mobileapp.ac
 
 // TextField(value = "ingrese nombre", onValueChange = {acViewModel.nameSet(it)})
 
-import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,8 +13,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Device
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,6 +41,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.model.ApiDevice
+import com.example.hci_mobileapp.data.network.model.State
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,8 +51,8 @@ fun AcCard(
 ) {
     val acUiState = acViewModel.uiState.collectAsState()
 
-    acViewModel.nameSet(data.name.toString())
-    acViewModel.idSet(data.id.toString())
+    acViewModel.nameSet(data.name)
+    acViewModel.idSet(data.id)
 
     var modeDialog = remember {
         mutableStateOf(false)
@@ -71,15 +70,23 @@ fun AcCard(
         mutableStateOf(false)
     }
 
+    val speedDialog = remember {
+        mutableStateOf(false)
+    }
+
     val modes = stringArrayResource(acUiState.value.arrays.AcModes)
 
     val horValues = stringArrayResource(acUiState.value.arrays.horValues)
 
     val verValues = stringArrayResource(acUiState.value.arrays.vertValues)
 
+    val speedValues = stringArrayResource(acUiState.value.arrays.fanSpeed)
+
+
     fun openOptions() {
         if (acUiState.value.state == R.string.On) optionDialog.value = true
     }
+
 
     fun doAndCloseMode(mode: String) {
         acViewModel.modeSwitch(mode)
@@ -94,6 +101,11 @@ fun AcCard(
     fun doAndCloseVert(mode: String) {
         acViewModel.vertSwingChange(mode)
         vertDialog.value = false
+    }
+
+    fun doAndCloseSpeed(speed: String){
+        acViewModel.speedChange(speed)
+        speedDialog.value = false
     }
 
     Surface(
@@ -193,7 +205,7 @@ fun AcCard(
         }
     }
 
-    if (optionDialog.value) {
+    if(optionDialog.value) {
         Dialog(onDismissRequest = { optionDialog.value = false }) {
             Surface(
                 modifier = Modifier
@@ -238,7 +250,7 @@ fun AcCard(
                     modifier = Modifier
                         .padding(top = 65.dp)
                 ) {
-                    TextButton(onClick = { /*TODO*/ }) {
+                    TextButton(onClick = { speedDialog.value = true }) {
                         Row() {
                             Icon(
                                 painter = painterResource(acUiState.value.icons.fanSpeed),
@@ -250,6 +262,11 @@ fun AcCard(
                         }
                     }
                 }
+            }
+            Button(onClick = {  optionDialog.value = false },
+                modifier = Modifier
+                    .padding(top = 100.dp, start = 150.dp)) {
+                Text(text = stringResource(id = R.string.confirmation))
             }
         }
     }
@@ -321,11 +338,51 @@ fun AcCard(
             }
         }
     }
+
+    if(speedDialog.value){
+        Dialog(onDismissRequest = { speedDialog.value = false }) {
+            Surface(
+                modifier = Modifier
+                    .width(365.dp)
+                    .height(150.dp),
+                shape = MaterialTheme.shapes.large,
+                tonalElevation = AlertDialogDefaults.TonalElevation,
+            ) {
+                Text(
+                    text = stringResource(id = R.string.fan_speed),
+                    textAlign = TextAlign.Center
+                )
+                Row(
+                    modifier = Modifier.padding(top = 25.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    LazyRow(
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        items(items = speedValues) { item ->
+                            TextButton(
+                                onClick = { doAndCloseSpeed(item) },
+                                modifier = Modifier.padding(start = 1.dp, end = 1.dp)
+                            ) {
+                                Text(item)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 
-/*
+
 @Composable
 @Preview
 fun acPrev(){
-    AcCard(name ="juan", id = "11")
-}*/
+    val juan: ApiDevice = ApiDevice(id = "si",
+    name = "tanto",
+    type = null,
+    state = State(status = null, color = null, brightness = null), meta = null
+    )
+    AcCard(data =juan)
+}

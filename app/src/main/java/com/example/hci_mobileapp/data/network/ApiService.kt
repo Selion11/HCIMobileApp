@@ -6,6 +6,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService{
@@ -18,15 +19,38 @@ interface ApiService{
     @GET("/devices")
     suspend fun getDevice(@Query("deviceId")deviceId: String) : Response<>
 */
-    @POST("/api/devices/{deviceID}/{actionName}")
+    @PUT("/api/devices/{deviceID}/{actionName}")
     suspend fun doActionBool(
       @Path("actionName") actionName: String,
       @Path("deviceID") deviceID: String,
   ) : Response<Boolean>
 
-    @POST("/api/devices/{deviceID}/{actionName}")
+    @PUT("/api/devices/{deviceID}/{actionName}")
     suspend fun speakerPLaylistGet(
         @Path("actionName") actionName: String,
-        @Path("deviceID") deviceID: String,
+        @Path("deviceID") deviceID: String
     ) : Response<Playlist>
+
+    @PUT("/api/devices/{deviceID}/{actionName}")
+    suspend fun doActionMixed(
+        @Path("actionName") actionName: String,
+        @Path("deviceID") deviceID: String,
+        @Body params: List<Any>
+    ): Response<Boolean>
+
+
+    @PUT("/api/devices/{deviceID}/{actionName}")
+    suspend fun doActionInt(
+        @Path("actionName") actionName: String,
+        @Path("deviceID") deviceID: String,
+        @Body params: Int
+    ): Response<Int>
+
+    @PUT("/api/devices/{deviceID}/{actionName}")
+    suspend fun doActionString(
+        @Path("actionName") actionName: String,
+        @Path("deviceID") deviceID: String,
+        @Body params: String
+    ): Response<String>
+
 }

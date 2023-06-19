@@ -51,8 +51,8 @@ fun FridgeCard(
 
     val modes = stringArrayResource(id = fridgeState.value.modes)
 
-    fridgeViewModel.nameSet(data.name.toString())
-    fridgeViewModel.setid(data.id.toString())
+    fridgeViewModel.nameSet(data.name)
+    fridgeViewModel.setid(data.id)
 
     Surface(
         shape = MaterialTheme.shapes.small,

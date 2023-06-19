@@ -47,7 +47,8 @@ fun SpeakerCard(
 
     val openDialog = remember { mutableStateOf(false) }
 
-    speakerViewModel.nameSet(data.name.toString())
+    speakerViewModel.nameSet(data.name)
+    speakerViewModel.setID(data.id)
 
     val genres = stringArrayResource(speakerUiState.value.genres)
 
@@ -154,7 +155,7 @@ fun SpeakerCard(
                     Row(
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        TextButton(onClick = { }
+                        TextButton(onClick = {/* abrir dialog que muestre las playlists*/ }
                         ) {
                             Icon(
                                 painter = painterResource(speakerUiState.value.icons.playList),

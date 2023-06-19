@@ -26,7 +26,8 @@ data class AcActions(
 data class AcArrays(
     @ArrayRes val AcModes: Int = R.array.ac_modes,
     @ArrayRes val vertValues: Int = R.array.vertical_values,
-    @ArrayRes val horValues: Int = R.array.horizontal_values
+    @ArrayRes val horValues: Int = R.array.horizontal_values,
+    @ArrayRes val fanSpeed: Int = R.array.fanSpeeds
 )
 
 data class AcUiState(
@@ -38,6 +39,7 @@ data class AcUiState(
     val mode: String = " ",
     val vertValue: String = " ",
     val horVal: String = " ",
-    val speed: Int = 5,
+    val speed: String = " ",
+    val temperature: Int = 24,
     val state: Int = R.string.Off
 )

@@ -1,7 +1,10 @@
 package com.example.hci_mobileapp.speaker
 
+import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.Song
 import kotlinx.coroutines.Job
@@ -21,11 +24,20 @@ class SpeakerViewModel : ViewModel() {
 
     private var action: String? = null
 
-    fun nameSet(nameToChange: String){
-        _speakerUiState.update { currentState ->
-            currentState.copy(name = nameToChange)
+    fun nameSet(nameToChange: String?){
+        if(nameToChange != null)
+            _speakerUiState.update { currentState ->
+                currentState.copy(name = nameToChange)
 
-        }
+            }
+    }
+
+
+    fun setID(ID: String?){
+        if(ID != null)
+            _speakerUiState.update {currentState ->
+                currentState.copy(id = ID)
+            }
     }
     fun iconSelectPlay(): Int{
         return if(uiState.value.state == "Paused"){
@@ -61,6 +73,18 @@ class SpeakerViewModel : ViewModel() {
         }
     }
 
+    fun setVolume(vol: Int){
+        postJob = viewModelScope.launch {
+            runCatching {
+                RetrofitClient.getApiService().doActionInt(
+                    actionName = action.toString(),
+                    deviceID = uiState.value.id,
+                    params = vol
+                )
+            }
+        }
+    }
+
     fun getPlaylist() {
         postJob = viewModelScope.launch {
             runCatching {
@@ -69,8 +93,8 @@ class SpeakerViewModel : ViewModel() {
                     deviceID = uiState.value.id
                 )
             }.onSuccess {response ->
-                _speakerUiState.update { currentstate ->
-                    currentstate.copy(playList = response.body()?.result)
+                _speakerUiState.update { currentState ->
+                    currentState.copy(playList = response.body()?.result)
                 }
             }
         }
@@ -122,9 +146,19 @@ class SpeakerViewModel : ViewModel() {
         }
 
 
-        fun genreSet(genre: String) {
+        fun genreSet(g: String) {
+            action = "setGenre"
+            postJob = viewModelScope.launch {
+                kotlin.runCatching {
+                    RetrofitClient.getApiService().doActionString(
+                        actionName = action.toString(),
+                        deviceID = uiState.value.id,
+                        params = g.toLowerCase()
+                    )
+                }
+            }
             _speakerUiState.update { currentState ->
-                currentState.copy(currGen = genre)
+                currentState.copy(currGen = g)
 
             }
         }

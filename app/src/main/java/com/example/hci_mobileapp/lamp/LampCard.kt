@@ -42,8 +42,8 @@ fun LampCard(
 ){
     val lampUiState = lampViewModel.uiState.collectAsState()
 
-    lampViewModel.nameSet(data.name.toString())
-    lampViewModel.setid(data.id.toString())
+    lampViewModel.nameSet(data.name)
+    lampViewModel.setid(data.id)
 
     val intensityDialog = remember { mutableStateOf(false) }
 
@@ -60,7 +60,7 @@ fun LampCard(
         ) {
             Row {
                 Text(
-                    text = lampUiState.value.name,
+                    text = lampUiState.value.name + lampUiState.value.id,
                     fontSize = 8.sp,
                     modifier = Modifier
                         .padding(horizontal = 8.dp)
@@ -130,7 +130,7 @@ fun LampCard(
                             contentDescription = null)
                     }
                     Slider(value = lampUiState.value.intensity.toInt().toFloat(),
-                        onValueChange = {lampViewModel.setIntensity(it)},
+                        onValueChange = {lampViewModel.setIntensity(it.toInt())},
                         valueRange = 0f..10f,
                     modifier = Modifier.width(240.dp))
                     IconButton(onClick = {

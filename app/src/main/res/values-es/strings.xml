@@ -9,11 +9,9 @@
     <string name="mode">Modo</string>
     <string name="vertical_swing">Desplazamiento Vertical</string>
     <string name="horizontal_swing">Desplazamiento Horizontal</string>
-    <string name="fan_speed">Velocidad del ventilad</string>
-    <string name="classic">Clasica</string>
+    <string name="fan_speed">Velocidad del ventilador</string>
     <string name="hot">Calor</string>
     <string name="cold">" Frío "</string>
-    <string name="ventilation">Ventilación</string>
     <string name="party">Fiesta</string>
     <string name="vacation">Vacaciones</string>
     <string name="temperature">Temperatura</string>

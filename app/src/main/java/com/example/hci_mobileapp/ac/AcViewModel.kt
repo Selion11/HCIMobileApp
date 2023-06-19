@@ -24,18 +24,38 @@ class AcViewModel : ViewModel(){
 
     private var action: String? = null
 
-    fun nameSet(nameToChange: String) {
-        postJob?.cancel()
-
-        _acUiState.update { currentState ->
-            currentState.copy(name = nameToChange)
-        }
+    fun nameSet(nameToChange: String?) {
+        if(nameToChange != null)
+            _acUiState.update { currentState ->
+                currentState.copy(name = nameToChange)
+            }
     }
 
-    fun idSet(id: String) {
-        _acUiState.update { currentState ->
-            currentState.copy(id = id)
+    fun idSet(ID: String?) {
+        if(ID != null)
+            _acUiState.update { currentState ->
+                currentState.copy(id = ID)
+            }
+    }
+
+    fun setTemp(temp : Int){
+        action =  "setTemperature"
+        postJob = viewModelScope.launch {
+            runCatching {
+                RetrofitClient.getApiService().doActionInt(
+                    actionName = action.toString(),
+                    deviceID = uiState.value.id,
+                    params = temp
+                )
+            }.onFailure {
+                /*Thorw Notification to user*/
+            }.onSuccess {
+                _acUiState.update { currentState ->
+                    currentState.copy(temperature = temp)
+                }
+            }
         }
+
     }
 
     fun iconSelection(): Int {
@@ -46,24 +66,86 @@ class AcViewModel : ViewModel(){
     }
 
     fun modeSwitch(mode: String){
+        action = "setMode"
+        postJob = viewModelScope.launch {
+           runCatching {
+               val modeToSend = when(mode){
+                   "Cool" -> "cool"
+                   "Frío" -> "cool"
+                   "Heat" -> "heat"
+                   "Calor" -> "heat"
+                   else -> "fan"
+               }
+               RetrofitClient.getApiService().doActionString(
+                   actionName = action.toString(),
+                   deviceID = uiState.value.id,
+                   params =  modeToSend
+               )
+            }
+        }
         _acUiState.update { currentState ->
             currentState.copy(mode = mode)
         }
     }
 
-    fun speedChange(speed: Int){
+    fun speedChange(speed: String){
+        action = "setFanSpeed"
+        postJob = viewModelScope.launch {
+            runCatching {
+                val modeToSend = when(speed){
+                    "Automatic" -> "auto"
+                    "Automático" -> "auto"
+                    else -> speed
+                }
+                RetrofitClient.getApiService().doActionString(
+                    actionName = action.toString(),
+                    deviceID = uiState.value.id,
+                    params =  modeToSend
+                )
+            }
+        }
         _acUiState.update { currentState ->
             currentState.copy(speed = speed)
         }
     }
 
     fun horiSwingChange(value: String){
+        action = "setHorizontalSwing"
+        postJob = viewModelScope.launch {
+            runCatching {
+                val modeToSend = when(value){
+                    "Automatic" -> "auto"
+                    "Automático" -> "auto"
+                    else -> value
+                }
+                RetrofitClient.getApiService().doActionString(
+                    actionName = action.toString(),
+                    deviceID = uiState.value.id,
+                    params =  modeToSend
+                )
+            }
+        }
         _acUiState.update { currentState ->
             currentState.copy(horVal = value)
         }
     }
 
     fun vertSwingChange(value: String){
+        action = "setVerticalSwing"
+        postJob = viewModelScope.launch {
+            runCatching {
+                val modeToSend = when(value){
+                    "Automatic" -> "auto"
+                    "Automático" -> "auto"
+                    else -> value
+                }
+                RetrofitClient.getApiService().doActionString(
+                    actionName = action.toString(),
+                    deviceID = uiState.value.id,
+                    params =  modeToSend
+                )
+            }
+        }
         _acUiState.update { currentState ->
             currentState.copy(vertValue = value)
         }

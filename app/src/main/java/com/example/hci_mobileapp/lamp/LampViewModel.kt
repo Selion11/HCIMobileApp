@@ -21,16 +21,18 @@ class LampViewModel: ViewModel() {
 
     private var action: String? = null
 
-    fun nameSet(nameToChange: String){
-        _lampUiState.update { currentState ->
-            currentState.copy(name = nameToChange)
-        }
+    fun nameSet(nameToChange: String?){
+        if(nameToChange != null)
+            _lampUiState.update { currentState ->
+                currentState.copy(name = nameToChange)
+            }
     }
 
-    fun setid(ID: String){
-        _lampUiState.update { currentState ->
-            currentState.copy(id = ID)
-        }
+    fun setid(ID: String?){
+        if(ID != null)
+            _lampUiState.update { currentState ->
+                    currentState.copy(id = ID)
+            }
     }
 
     fun iconSelection(): Int {
@@ -64,13 +66,33 @@ class LampViewModel: ViewModel() {
         }
     }
 
-    fun colorSet(colorToSet: Long){
+    fun colorSet(colorToSet: String){
+        action = "setColor"
+        postJob = viewModelScope.launch {
+            runCatching {
+                RetrofitClient.getApiService().doActionString(
+                    actionName = action.toString(),
+                    deviceID = uiState.value.id,
+                    params = colorToSet
+                )
+            }
+        }
         _lampUiState.update { currentState ->
             currentState.copy(col = colorToSet)
         }
     }
 
-    fun setIntensity(intensity: Float){
+    fun setIntensity(intensity: Int){
+        action = "setBrightness"
+        postJob = viewModelScope.launch {
+            runCatching {
+                RetrofitClient.getApiService().doActionInt(
+                    actionName = action.toString(),
+                    deviceID = uiState.value.id,
+                    params = intensity
+                )
+            }
+        }
         _lampUiState.update { currentState ->
             currentState.copy(intensity = intensity)
         }
