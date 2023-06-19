@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -57,13 +59,19 @@ fun FaucetCard(
     var unitsDialog by remember { mutableStateOf( false) } 
     
     val units = stringArrayResource(faucetUiState.value.units)
+
+    fun closeUnits(units: String){
+        faucetViewModel.setDispenseUnit(units)
+        unitsDialog = false
+    }
     
     Surface(
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(width = 2.dp, color = Color.Black),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 5.dp),
+            .padding(horizontal = 5.dp)
+            .height(95.dp),
     ) {
         Column(
             modifier = Modifier
@@ -76,9 +84,9 @@ fun FaucetCard(
                 faucetUiState.value.name?.let {
                     Text(
                         text = it,
-                        fontSize = 8.sp,
+                        fontSize = 14.sp,
                         modifier = Modifier
-                            .padding(horizontal = 8.dp)
+                            .padding(horizontal = 8.dp),
                     )
                 }
             }
@@ -92,26 +100,41 @@ fun FaucetCard(
                         )
                 }
             }
+            Row {
+                Text(
+                    text = faucetUiState.value.dispenseUnits,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .padding(horizontal = 15.dp)
+                )
+            }
         }
         Column(
             modifier = Modifier
                 .padding(horizontal = 45.dp)
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .width(180.dp)
-                    .padding(10.dp)
-                    .height(55.dp)
+                    .fillMaxWidth()
+                    .padding(top = 18.dp)
+                    .height(55.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
 
-                IconButton(onClick = {dispenseDialog = true  },
-                    enabled = faucetUiState.value.state == R.string.On
+              TextButton(onClick = {dispenseDialog = true  },
+                    enabled = faucetUiState.value.state == R.string.On,
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.Black,
+                        containerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent
+                    )
                 ) {
                     Icon(
                         painter = painterResource(faucetUiState.value.icons.disp),
                         contentDescription = null
                     )
+                    Text(text = stringResource(faucetUiState.value.actions.dispense))
                 }
             }
         }
@@ -144,7 +167,10 @@ fun FaucetCard(
                                 , contentDescription = null)
                             Text(text = stringResource(R.string.units))
                         }
-                        TextButton(onClick = {  }
+                        TextButton(
+                            onClick = {
+                                faucetViewModel.dispense(dispVal.toInt())
+                            }
                         ){
                             Icon(
                                 painter = painterResource(faucetUiState.value.icons.disp),
@@ -153,13 +179,6 @@ fun FaucetCard(
                             Text(
                                 text = stringResource(faucetUiState.value.actions.dispense)
                             )
-                        }
-                        TextButton(
-                                onClick = {
-                                    dispenseDialog = false
-                                },
-                        ) {
-                        Text(stringResource(id = R.string.confirmation))
                         }
                     }
                 }
@@ -181,22 +200,12 @@ fun FaucetCard(
                     LazyRow() {
                         items(items = units) { item ->
                             TextButton(
-                                onClick = { faucetViewModel.setDispenseUnit(item) },
+                                onClick = { closeUnits(item) },
                                 modifier = Modifier.padding(start = 1.dp, end = 1.dp)
                             ) {
                                 Text(item)
                             }
                         }
-                    }
-                }
-                Spacer(modifier = Modifier.height(12.dp))
-                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
-                    TextButton(
-                        onClick = {
-                            unitsDialog = false
-                        },
-                    ) {
-                        Text(stringResource(id = R.string.confirmation))
                     }
                 }
             }

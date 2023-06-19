@@ -35,7 +35,8 @@ interface ApiService{
     suspend fun doActionMixed(
         @Path("actionName") actionName: String?,
         @Path("deviceID") deviceID: String?,
-        @Body params: List<Any>
+        @Body quantity: Int,
+        @Body units: String
     ): Response<Boolean>
 
 

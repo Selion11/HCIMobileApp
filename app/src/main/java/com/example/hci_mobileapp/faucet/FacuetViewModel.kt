@@ -31,15 +31,14 @@ class FacuetViewModel(device: ApiDevice) : ViewModel() {
     private var action: String? = null
 
     fun dispense(value: Int){
-        val toDispense = listOf<Any>(
-            uiState.value.dispenseUnits,
-            value)
+        action = "dispense"
         postJob =  viewModelScope.launch {
             runCatching {
                 RetrofitClient.getApiService().doActionMixed(
-                    actionName = action.toString(),
+                    actionName = action,
                     deviceID = uiState.value.id,
-                    params = toDispense
+                    quantity = value,
+                    units = uiState.value.dispenseUnits
                 )
             }.onFailure {
                 /*Thorw Notification to user*/
@@ -69,9 +68,9 @@ class FacuetViewModel(device: ApiDevice) : ViewModel() {
         }
 
         action = if(uiState.value.state ==(R.string.Off)){
-            "turnOff"
+            "close"
         }else
-            "turnOn"
+            "open"
 
         postJob = viewModelScope.launch {
             runCatching {
