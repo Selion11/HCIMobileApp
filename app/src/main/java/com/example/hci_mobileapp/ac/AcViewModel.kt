@@ -1,13 +1,10 @@
 package com.example.hci_mobileapp.ac
 
-import android.annotation.SuppressLint
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +12,24 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class AcViewModel : ViewModel(){
+class AcViewModel(device: ApiDevice) : ViewModel(){
     private val _acUiState = MutableStateFlow(AcUiState())
+
+    init {
+        _acUiState.value = AcUiState(
+            name = device.name,
+            id = device.id,
+            mode = "Auto",
+            vertValue = "Auto",
+            horVal = "Auto",
+            speed = "Auto",
+        )
+        setTemp(24)
+        modeSwitch("Cool")
+        speedChange("Automatic")
+        vertSwingChange("Automatic")
+        horiSwingChange("Automatic")
+    }
 
     val uiState: StateFlow<AcUiState> = _acUiState.asStateFlow()
 
@@ -24,38 +37,24 @@ class AcViewModel : ViewModel(){
 
     private var action: String? = null
 
-    fun nameSet(nameToChange: String?) {
-        if(nameToChange != null)
-            _acUiState.update { currentState ->
-                currentState.copy(name = nameToChange)
-            }
-    }
 
-    fun idSet(ID: String?) {
-        if(ID != null)
-            _acUiState.update { currentState ->
-                currentState.copy(id = ID)
-            }
-    }
-
-    fun setTemp(temp : Int){
+    fun setTemp(temp: Int){
         action =  "setTemperature"
         postJob = viewModelScope.launch {
             runCatching {
                 RetrofitClient.getApiService().doActionInt(
                     actionName = action.toString(),
                     deviceID = uiState.value.id,
-                    params = temp
+                    params = listOf(temp)
                 )
             }.onFailure {
-                /*Thorw Notification to user*/
+            /*Thorw Notification to user*/
             }.onSuccess {
-                _acUiState.update { currentState ->
-                    currentState.copy(temperature = temp)
-                }
             }
         }
-
+        _acUiState.update { currentState ->
+            currentState.copy(temperature = temp)
+        }
     }
 
     fun iconSelection(): Int {
@@ -79,7 +78,7 @@ class AcViewModel : ViewModel(){
                RetrofitClient.getApiService().doActionString(
                    actionName = action.toString(),
                    deviceID = uiState.value.id,
-                   params =  modeToSend
+                   params =  listOf(modeToSend)
                )
             }
         }
@@ -88,25 +87,28 @@ class AcViewModel : ViewModel(){
         }
     }
 
+    fun chooseSpeed(speed: String): String{
+        return when(speed){
+            "Automatic" -> "auto"
+            "Automático" -> "auto"
+            else -> speed
+        }
+    }
     fun speedChange(speed: String){
         action = "setFanSpeed"
         postJob = viewModelScope.launch {
             runCatching {
-                val modeToSend = when(speed){
-                    "Automatic" -> "auto"
-                    "Automático" -> "auto"
-                    else -> speed
-                }
                 RetrofitClient.getApiService().doActionString(
                     actionName = action.toString(),
                     deviceID = uiState.value.id,
-                    params =  modeToSend
+                    params =  listOf( chooseSpeed(speed))
                 )
             }
         }
         _acUiState.update { currentState ->
             currentState.copy(speed = speed)
         }
+        postJob = null
     }
 
     fun horiSwingChange(value: String){
@@ -121,7 +123,7 @@ class AcViewModel : ViewModel(){
                 RetrofitClient.getApiService().doActionString(
                     actionName = action.toString(),
                     deviceID = uiState.value.id,
-                    params =  modeToSend
+                    params =  listOf(modeToSend)
                 )
             }
         }
@@ -142,7 +144,7 @@ class AcViewModel : ViewModel(){
                 RetrofitClient.getApiService().doActionString(
                     actionName = action.toString(),
                     deviceID = uiState.value.id,
-                    params =  modeToSend
+                    params =  listOf(modeToSend)
                 )
             }
         }

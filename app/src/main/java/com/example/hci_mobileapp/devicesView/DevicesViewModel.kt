@@ -18,8 +18,6 @@ class DevicesViewModel: ViewModel(){
 
     val uiState : StateFlow<DevicesUiState> = _devicesUiState.asStateFlow()
 
-    val devices: List<ApiDevice>? = null
-
     private var fetchJob: Job? = null
 
     fun dismissMessage(){
@@ -27,6 +25,7 @@ class DevicesViewModel: ViewModel(){
             currentState.copy(MSG = null)
         }
     }
+
 
     fun fetchAllDevices(){
         fetchJob?.cancel()

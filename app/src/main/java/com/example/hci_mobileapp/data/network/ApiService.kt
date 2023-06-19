@@ -21,36 +21,36 @@ interface ApiService{
 */
     @PUT("/api/devices/{deviceID}/{actionName}")
     suspend fun doActionBool(
-      @Path("actionName") actionName: String,
-      @Path("deviceID") deviceID: String,
+      @Path("actionName") actionName: String?,
+      @Path("deviceID") deviceID: String?,
   ) : Response<Boolean>
 
     @PUT("/api/devices/{deviceID}/{actionName}")
     suspend fun speakerPLaylistGet(
-        @Path("actionName") actionName: String,
-        @Path("deviceID") deviceID: String
+        @Path("actionName") actionName: String?,
+        @Path("deviceID") deviceID: String?
     ) : Response<Playlist>
 
     @PUT("/api/devices/{deviceID}/{actionName}")
     suspend fun doActionMixed(
-        @Path("actionName") actionName: String,
-        @Path("deviceID") deviceID: String,
+        @Path("actionName") actionName: String?,
+        @Path("deviceID") deviceID: String?,
         @Body params: List<Any>
     ): Response<Boolean>
 
 
     @PUT("/api/devices/{deviceID}/{actionName}")
     suspend fun doActionInt(
-        @Path("actionName") actionName: String,
-        @Path("deviceID") deviceID: String,
-        @Body params: Int
+        @Path("actionName") actionName: String?,
+        @Path("deviceID") deviceID: String?,
+        @Body params: List<Int>
     ): Response<Int>
 
     @PUT("/api/devices/{deviceID}/{actionName}")
     suspend fun doActionString(
-        @Path("actionName") actionName: String,
-        @Path("deviceID") deviceID: String,
-        @Body params: String
+        @Path("actionName") actionName: String?,
+        @Path("deviceID") deviceID: String?,
+        @Body params: List<String>
     ): Response<String>
 
 }

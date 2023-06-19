@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -45,12 +46,9 @@ import com.example.hci_mobileapp.data.network.model.ApiDevice
 @Composable
 fun FaucetCard(
     faucetViewModel: FacuetViewModel = viewModel(),
-   data: ApiDevice
 ){
     val faucetUiState = faucetViewModel.uiState.collectAsState()
 
-    faucetViewModel.nameSet(data.name)
-    faucetViewModel.setId(data.id)
     
     var dispVal by remember { mutableStateOf("0") }
     
@@ -63,6 +61,9 @@ fun FaucetCard(
     Surface(
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(width = 2.dp, color = Color.Black),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp),
     ) {
         Column(
             modifier = Modifier
@@ -72,12 +73,14 @@ fun FaucetCard(
                 ),
         ) {
             Row {
-                Text(
-                    text = faucetUiState.value.name,
-                    fontSize = 8.sp,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                )
+                faucetUiState.value.name?.let {
+                    Text(
+                        text = it,
+                        fontSize = 8.sp,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                    )
+                }
             }
             Row {
                 IconButton(onClick = {faucetViewModel.turnOnOff() }) {
@@ -139,6 +142,7 @@ fun FaucetCard(
                         TextButton(onClick = { unitsDialog = true }) {
                             Icon(painter = painterResource(id = faucetUiState.value.icons.disp)
                                 , contentDescription = null)
+                            Text(text = stringResource(R.string.units))
                         }
                         TextButton(onClick = {  }
                         ){

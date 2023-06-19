@@ -131,6 +131,7 @@
     <string name="units">Units</string>
     <string name="horSwingMSg">Select a horizontal swing</string>
     <string name="vertSwingMsg">Select a vertical swing</string>
+    <string name="vol">Volume</string>
 
 
 </resources>

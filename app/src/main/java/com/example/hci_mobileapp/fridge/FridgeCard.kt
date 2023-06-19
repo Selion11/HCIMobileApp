@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,7 +40,6 @@ import com.example.hci_mobileapp.data.network.model.ApiDevice
 @Composable
 fun FridgeCard(
     fridgeViewModel: FridgeViewModel = viewModel(),
-    data: ApiDevice
 ){
 
 
@@ -51,12 +51,11 @@ fun FridgeCard(
 
     val modes = stringArrayResource(id = fridgeState.value.modes)
 
-    fridgeViewModel.nameSet(data.name)
-    fridgeViewModel.setid(data.id)
-
     Surface(
         shape = MaterialTheme.shapes.small,
-        modifier = Modifier.width(350.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp),
         border = BorderStroke(width = 2.dp, color = Color.Black),
     ) {
         Column(
@@ -67,12 +66,14 @@ fun FridgeCard(
                 ),
         ) {
             Row {
-                Text(
-                    text = fridgeState.value.name,
-                    fontSize = 8.sp,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                )
+                fridgeState.value.name?.let {
+                    Text(
+                        text = it,
+                        fontSize = 8.sp,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                    )
+                }
             }
             Row {
                 Icon(
@@ -109,21 +110,6 @@ fun FridgeCard(
                     modifier = Modifier,
                     tint = Color.Black)
                 Text(text = "Mode", color = Color.Black)
-            }
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(top = 9.dp)
-                .height(55.dp),
-            horizontalArrangement = Arrangement.End
-        ) {
-            IconButton(onClick = { dialogOpen.value = true },
-                modifier = Modifier.align(Alignment.CenterVertically)) {
-                Icon(
-                    painter = painterResource(fridgeState.value.icons.more),
-                    contentDescription = null
-                )
             }
         }
     }

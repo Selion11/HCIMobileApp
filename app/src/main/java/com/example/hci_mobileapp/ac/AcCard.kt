@@ -6,6 +6,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,7 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -34,25 +34,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.R
-import com.example.hci_mobileapp.data.network.model.ApiDevice
-import com.example.hci_mobileapp.data.network.model.State
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AcCard(
     acViewModel: AcViewModel = viewModel(),
-    data: ApiDevice
 ) {
     val acUiState = acViewModel.uiState.collectAsState()
-
-    acViewModel.nameSet(data.name)
-    acViewModel.idSet(data.id)
 
     var modeDialog = remember {
         mutableStateOf(false)
@@ -112,6 +105,10 @@ fun AcCard(
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(width = 2.dp, color = Color.Black),
         onClick = { openOptions() },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp)
+            .height(95.dp),
     ) {
         Column(
             modifier = Modifier
@@ -121,12 +118,14 @@ fun AcCard(
                 ),
         ) {
             Row {
-                Text(
-                    text = acUiState.value.name + acUiState.value.mode,
-                    fontSize = 8.sp,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                )
+                acUiState.value.name?.let {
+                    Text(
+                        text = it,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp),
+                    )
+                }
             }
             Row {
                 IconButton(onClick = { acViewModel.turnOnOff() }) {
@@ -137,6 +136,15 @@ fun AcCard(
                         )
                 }
             }
+            Row{
+                acUiState.value.mode?.let {
+                    Text(
+                        text = it,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                    ) }
+            }
         }
         Column(
             modifier = Modifier
@@ -146,15 +154,15 @@ fun AcCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .width(180.dp)
-                    .padding(10.dp)
+                    .fillMaxWidth()
+                    .padding(top = 18.dp)
                     .height(55.dp)
             ) {
 
                 TextButton(
                     onClick = { modeDialog.value = true },
                     enabled = acUiState.value.state == R.string.On,
-                    modifier = Modifier.padding(start = 40.dp),
+                    modifier = Modifier.padding(start = 15.dp),
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Color.Black,
                         containerColor = Color.Transparent,
@@ -167,8 +175,28 @@ fun AcCard(
                     )
                     Text(text = stringResource(acUiState.value.actions.mode))
                 }
+                TextButton(
+                    onClick = { acViewModel.setTemp(acUiState.value.temperature - 1) },
+                    enabled = acUiState.value.state == R.string.On
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.minus),
+                        contentDescription = null)
+                }
+                Text(
+                    text = acUiState.value.temperature.toString(),
+                    fontSize = 15.sp
+                )
+                TextButton(
+                    onClick = { acViewModel.setTemp(acUiState.value.temperature + 1) },
+                    enabled = acUiState.value.state == R.string.On,
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_add_24),
+                        contentDescription = null)
+                }
             }
-        }
+            }
     }
 
     if (modeDialog.value) {
@@ -376,6 +404,7 @@ fun AcCard(
 }
 
 
+/*
 @Composable
 @Preview
 fun acPrev(){
@@ -386,3 +415,4 @@ fun acPrev(){
     )
     AcCard(data =juan)
 }
+*/

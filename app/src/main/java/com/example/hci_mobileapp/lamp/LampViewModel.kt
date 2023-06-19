@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,28 +13,22 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LampViewModel: ViewModel() {
+class LampViewModel(device: ApiDevice): ViewModel() {
+
     private val _lampUiState = MutableStateFlow(LampUiState())
+
+    init {
+        _lampUiState.value = LampUiState(
+            name = device.name,
+            id = device.id
+        )
+    }
 
     val uiState: StateFlow<LampUiState> = _lampUiState.asStateFlow()
 
     private var postJob: Job? = null
 
     private var action: String? = null
-
-    fun nameSet(nameToChange: String?){
-        if(nameToChange != null)
-            _lampUiState.update { currentState ->
-                currentState.copy(name = nameToChange)
-            }
-    }
-
-    fun setid(ID: String?){
-        if(ID != null)
-            _lampUiState.update { currentState ->
-                    currentState.copy(id = ID)
-            }
-    }
 
     fun iconSelection(): Int {
         return if (uiState.value.state == R.string.Off) {
@@ -73,7 +68,7 @@ class LampViewModel: ViewModel() {
                 RetrofitClient.getApiService().doActionString(
                     actionName = action.toString(),
                     deviceID = uiState.value.id,
-                    params = colorToSet
+                    params = listOf(colorToSet)
                 )
             }
         }
@@ -89,7 +84,7 @@ class LampViewModel: ViewModel() {
                 RetrofitClient.getApiService().doActionInt(
                     actionName = action.toString(),
                     deviceID = uiState.value.id,
-                    params = intensity
+                    params = listOf(intensity)
                 )
             }
         }

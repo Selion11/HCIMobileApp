@@ -15,22 +15,25 @@ data class SpeakerIcons(
     @DrawableRes val playList: Int = R.drawable.baseline_playlist_play_24,
     @DrawableRes val genres: Int = R.drawable.baseline_music_note_24,
     @DrawableRes val stop: Int = R.drawable.stop,
-    @DrawableRes val pause: Int = R.drawable.pause
+    @DrawableRes val pause: Int = R.drawable.pause,
+    @DrawableRes val vol: Int = R.drawable.volume
 
 )
 
 data class SpeakerActions(
     @StringRes val plist: Int = R.string.playlist,
-    @StringRes val gen: Int = R.string.genre
+    @StringRes val gen: Int = R.string.genre,
+    @StringRes val vol: Int = R.string.vol
 )
 
 data class SpeakerUiState (
     val icons: SpeakerIcons = SpeakerIcons(),
     val actions: SpeakerActions = SpeakerActions(),
-    val name : String = " ",
-    val id: String =  " ",
-    val state: String = "Paused",
+    val name : String? = " ",
+    val id: String? =  " ",
+    val volume: Int? = 5,
+    val state: String? = "Paused",
     val playList: List<Song>? = null,
     @ArrayRes val genres: Int = R.array.genres,
-    val currGen: String = " "
+    val currGen: String? = " "
 )

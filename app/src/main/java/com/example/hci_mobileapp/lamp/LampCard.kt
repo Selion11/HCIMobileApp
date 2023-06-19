@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -38,18 +39,17 @@ import com.example.hci_mobileapp.data.network.model.ApiDevice
 @Composable
 fun LampCard(
     lampViewModel: LampViewModel = viewModel(),
-    data: ApiDevice
 ){
     val lampUiState = lampViewModel.uiState.collectAsState()
-
-    lampViewModel.nameSet(data.name)
-    lampViewModel.setid(data.id)
 
     val intensityDialog = remember { mutableStateOf(false) }
 
     Surface(
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(width = 2.dp, color = Color.Black),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp),
     ) {
         Column(
             modifier = Modifier
@@ -129,7 +129,7 @@ fun LampCard(
                         Icon(painter = painterResource(id = R.drawable.minus),
                             contentDescription = null)
                     }
-                    Slider(value = lampUiState.value.intensity.toInt().toFloat(),
+                    Slider(value = lampUiState.value.intensity.toFloat(),
                         onValueChange = {lampViewModel.setIntensity(it.toInt())},
                         valueRange = 0f..10f,
                     modifier = Modifier.width(240.dp))

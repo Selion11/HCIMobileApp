@@ -18,11 +18,11 @@ data class LampActions(
 )
 
 data class LampUiState(
-    val name: String = " ",
-    val id: String = " ",
+    val name: String? = " ",
+    val id: String? = " ",
     val icons: LampIcons = LampIcons(),
     val actions: LampActions = LampActions(),
     val state: Int = R.string.Off,
-    @ColorLong val col: String = " ",
+    @ColorLong val col: String = "000000",
     val intensity: Int = 5
 )

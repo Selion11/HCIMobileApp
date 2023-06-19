@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,9 +12,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class FacuetViewModel : ViewModel() {
+class FacuetViewModel(device: ApiDevice) : ViewModel() {
 
     private val _faucetUiState = MutableStateFlow(FaucetUiState())
+
+    init {
+        _faucetUiState.value = FaucetUiState(
+            name = device.name,
+            id = device.id
+        )
+    }
 
     val uiState: StateFlow<FaucetUiState> = _faucetUiState.asStateFlow()
 
@@ -21,13 +29,6 @@ class FacuetViewModel : ViewModel() {
 
 
     private var action: String? = null
-
-    fun nameSet(nameToChange: String?) {
-        if(nameToChange != null)
-        _faucetUiState.update { currentState ->
-            currentState.copy(name = nameToChange)
-        }
-    }
 
     fun dispense(value: Int){
         val toDispense = listOf<Any>(
@@ -56,13 +57,6 @@ class FacuetViewModel : ViewModel() {
             R.drawable.outline_water_drop_24
         } else
             R.drawable.baseline_water_drop_24
-    }
-
-    fun setId(ID: String?){
-        if(ID != null)
-            _faucetUiState.update {currentState->
-                currentState.copy(id = ID)
-            }
     }
 
     fun turnOnOff(){

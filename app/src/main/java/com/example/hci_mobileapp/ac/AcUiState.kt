@@ -31,15 +31,15 @@ data class AcArrays(
 )
 
 data class AcUiState(
-    val name: String = " ",
-    val id: String = " ",
+    val name: String? = " ",
+    val id: String? = " ",
     val icons: AcIcons = AcIcons(),
     val actions: AcActions = AcActions(),
     val arrays: AcArrays = AcArrays(),
-    val mode: String = " ",
-    val vertValue: String = " ",
-    val horVal: String = " ",
-    val speed: String = " ",
+    val mode: String? = " ",
+    val vertValue: String? = " ",
+    val horVal: String? = " ",
+    val speed: String? = " ",
     val temperature: Int = 24,
     val state: Int = R.string.Off
 )

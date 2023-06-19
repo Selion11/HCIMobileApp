@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 import com.example.hci_mobileapp.data.network.model.Song
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +15,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SpeakerViewModel : ViewModel() {
+class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     private val _speakerUiState = MutableStateFlow(SpeakerUiState())
+    init {
+        _speakerUiState.value = SpeakerUiState(
+            name = device.name,
+            id=device.id
+        )
+    }
+
 
     val uiState :StateFlow<SpeakerUiState> = _speakerUiState.asStateFlow()
 
@@ -24,26 +32,11 @@ class SpeakerViewModel : ViewModel() {
 
     private var action: String? = null
 
-    fun nameSet(nameToChange: String?){
-        if(nameToChange != null)
-            _speakerUiState.update { currentState ->
-                currentState.copy(name = nameToChange)
-
-            }
-    }
-
-
-    fun setID(ID: String?){
-        if(ID != null)
-            _speakerUiState.update {currentState ->
-                currentState.copy(id = ID)
-            }
-    }
-    fun iconSelectPlay(): Int{
+    fun iconSelectPlay(): Int?{
         return if(uiState.value.state == "Paused"){
-            uiState.value.icons.pause
+            uiState.value.icons?.pause
         } else
-            uiState.value.icons.play
+            uiState.value.icons?.play
     }
 
     fun playPause() {
@@ -71,18 +64,25 @@ class SpeakerViewModel : ViewModel() {
                 /*Thorw Notification to user*/
             }
         }
+        postJob = null
     }
 
     fun setVolume(vol: Int){
+        action = "setVolume"
         postJob = viewModelScope.launch {
             runCatching {
                 RetrofitClient.getApiService().doActionInt(
                     actionName = action.toString(),
                     deviceID = uiState.value.id,
-                    params = vol
+                    params = listOf(vol)
                 )
             }
         }
+
+        _speakerUiState.update {currentState ->
+            currentState.copy(volume = vol)
+        }
+
     }
 
     fun getPlaylist() {
@@ -153,7 +153,7 @@ class SpeakerViewModel : ViewModel() {
                     RetrofitClient.getApiService().doActionString(
                         actionName = action.toString(),
                         deviceID = uiState.value.id,
-                        params = g.toLowerCase()
+                        params = listOf(g.lowercase())
                     )
                 }
             }

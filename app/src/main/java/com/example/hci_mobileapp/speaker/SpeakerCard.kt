@@ -1,20 +1,27 @@
 package com.example.hci_mobileapp.speaker
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -25,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.integerArrayResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -36,10 +44,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.model.ApiDevice
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SpeakerCard(
     speakerViewModel: SpeakerViewModel = viewModel(),
-    data: ApiDevice
     ){
     val speakerUiState = speakerViewModel.uiState.collectAsState()
 
@@ -47,14 +55,19 @@ fun SpeakerCard(
 
     val openDialog = remember { mutableStateOf(false) }
 
-    speakerViewModel.nameSet(data.name)
-    speakerViewModel.setID(data.id)
+    val intensityDialog = remember {
+         mutableStateOf(false)
+    }
 
-    val genres = stringArrayResource(speakerUiState.value.genres)
+    val genres = speakerUiState.value.genres.let { stringArrayResource(it) }
 
     Surface(
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(width = 2.dp, color = Color.Black),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 5.dp),
+        onClick = { openDialog.value = true }
     ) {
         Column(
             modifier = Modifier
@@ -64,19 +77,23 @@ fun SpeakerCard(
                 ),
         ) {
             Row {
-                Text(
-                    text = speakerUiState.value.name,
-                    fontSize = 8.sp,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                )
+                speakerUiState.value.name?.let {
+                    Text(
+                        text = it,
+                        fontSize = 8.sp,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                    )
+                }
             }
             Row {
-                Icon(
-                    painter = painterResource(speakerUiState.value.icons.speaker),
-                    contentDescription = stringResource(R.string.speaker),
-                    modifier = Modifier.size(45.dp)
-                )
+                speakerUiState.value.icons.let { painterResource(it.speaker) }.let {
+                    Icon(
+                        painter = it,
+                        contentDescription = stringResource(R.string.speaker),
+                        modifier = Modifier.size(45.dp)
+                    )
+                }
             }
             Row {
                 Text(
@@ -109,10 +126,12 @@ fun SpeakerCard(
                 IconButton(
                     onClick ={ speakerViewModel.playPause() }
                 ) {
-                    Icon(
-                        painter = painterResource(speakerViewModel.iconSelectPlay()),
-                        contentDescription = null,
-                    )
+                    speakerViewModel.iconSelectPlay()?.let { painterResource(it) }?.let {
+                        Icon(
+                            painter = it,
+                            contentDescription = null,
+                        )
+                    }
                 }
                 IconButton(
                     onClick ={ speakerViewModel.stop() }
@@ -128,33 +147,28 @@ fun SpeakerCard(
                         contentDescription = null
                     )
                 }
-                IconButton(onClick = { openDialog.value = true }) {
-                    Icon(
-                        painter = painterResource(speakerUiState.value.icons.more),
-                        contentDescription = null
-                    )
-                }
             }
         }
     }
 
     if (openDialog.value) {
         Dialog(
-            onDismissRequest = { openDialog.value = false }
+            onDismissRequest = { openDialog.value = false },
         ) {
             Surface(
                 modifier = Modifier
                     .width(365.dp)
-                    .height(150.dp),
+                    .height(300.dp),
                 shape = MaterialTheme.shapes.large,
                 tonalElevation = AlertDialogDefaults.TonalElevation
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .scrollable(state = rememberScrollState(), orientation = Orientation.Vertical),
+                    verticalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
+                    Row() {
                         TextButton(onClick = {/* abrir dialog que muestre las playlists*/ }
                         ) {
                             Icon(
@@ -163,6 +177,8 @@ fun SpeakerCard(
                             )
                             Text(text = stringResource(speakerUiState.value.actions.plist))
                         }
+                    }
+                    Row() {
                         TextButton(onClick = { genDialog.value = true }
                         ) {
                             Icon(
@@ -170,6 +186,16 @@ fun SpeakerCard(
                                 contentDescription = null
                             )
                             Text(text = stringResource(speakerUiState.value.actions.gen))
+                        }
+                    }
+                     Row() {
+                        TextButton(
+                            onClick = { intensityDialog.value = true}
+                        ){
+                            Icon(painter = painterResource(speakerUiState.value.icons.vol),
+                                contentDescription = null
+                            )
+                            Text(text = stringResource(speakerUiState.value.actions.vol))
                         }
                     }
                     Spacer(modifier = Modifier.height(12.dp))
@@ -214,6 +240,52 @@ fun SpeakerCard(
                     TextButton(
                         onClick = {
                             genDialog.value = false
+                        },
+                    ) {
+                        Text(stringResource(id = R.string.confirmation))
+                    }
+                }
+            }
+        }
+    }
+
+    if(intensityDialog.value){
+        Dialog(onDismissRequest = { intensityDialog.value = false }) {
+            Surface(
+                modifier = Modifier
+                    .width(365.dp)
+                    .height(150.dp),
+                shape = MaterialTheme.shapes.large,
+                tonalElevation = AlertDialogDefaults.TonalElevation
+            ){
+                Text(text = speakerUiState.value.volume.toString())
+
+                Row() {
+                    IconButton(onClick = {
+                        speakerViewModel.setVolume(speakerUiState.value.volume?.minus(1) ?: 0)
+                    }) {
+                        Icon(painter = painterResource(id = R.drawable.minus),
+                            contentDescription = null)
+                    }
+                    speakerUiState.value.volume?.let {
+                        Slider(value = it.toFloat(),
+                            onValueChange = {speakerViewModel.setVolume(it.toInt())},
+                            valueRange = 0f..10f,
+                            modifier = Modifier.width(240.dp))
+                    }
+                    IconButton(onClick = {
+                        speakerViewModel.setVolume(speakerUiState.value.volume?.plus(1) ?: 0)
+                    }) {
+                        Icon(painter = painterResource(id = R.drawable.baseline_add_24),
+                            contentDescription = null)
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+                Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.Center) {
+                    TextButton(
+                        onClick = {
+                            intensityDialog.value = false
                         },
                     ) {
                         Text(stringResource(id = R.string.confirmation))

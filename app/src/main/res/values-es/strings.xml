@@ -94,4 +94,5 @@
     <string name="units">Unidades</string>
     <string name="horSwingMSg">Selccione un balanceo horizontal</string>
     <string name="vertSwingMsg">Selccione un balanceo vertical</string>
+    <string name="vol">Volumen</string>
 </resources>

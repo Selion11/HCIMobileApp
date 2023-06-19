@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = { BottomBar(navController = navController) },
-                    containerColor = MaterialTheme.colorScheme.secondary
+                    containerColor = Color.Transparent
                 ) { paddingValues ->
                     Surface(
                         modifier = Modifier.padding(paddingValues),
