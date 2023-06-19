@@ -24,5 +24,5 @@ data class LampUiState(
     val actions: LampActions = LampActions(),
     val state: Int = R.string.Off,
     @ColorLong val col: String = "000000",
-    val intensity: Int = 5
+    val intensity: Int = 50
 )

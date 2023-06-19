@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +50,8 @@ fun LampCard(
         border = BorderStroke(width = 2.dp, color = Color.Black),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 5.dp),
+            .padding(horizontal = 5.dp)
+            .height(95.dp),
     ) {
         Column(
             modifier = Modifier
@@ -59,12 +61,14 @@ fun LampCard(
                 ),
         ) {
             Row {
-                Text(
-                    text = lampUiState.value.name + lampUiState.value.id,
-                    fontSize = 8.sp,
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                )
+                lampUiState.value.name?.let {
+                    Text(
+                        text = it,
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp),
+                    )
+                }
             }
             Row {
                 IconButton(onClick = {lampViewModel.turnOnOff() }) {
@@ -84,25 +88,40 @@ fun LampCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .width(180.dp)
-                    .padding(10.dp)
-                    .height(55.dp)
+                    .fillMaxWidth()
+                    .padding(top = 18.dp)
+                    .height(55.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
 
-                IconButton(onClick = {/* Open dialog and picker to select value
+                TextButton(onClick = {/* Open dialog and picker to select value
                       send that value to color set*/  },
-                    enabled = lampUiState.value.state == R.string.On
+                    enabled = lampUiState.value.state == R.string.On,
+                    modifier = Modifier.padding(start = 15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.Black,
+                        containerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent
+                    )
                 ) {
+                    Text(text = stringResource(lampUiState.value.actions.colChange))
                     Icon(
                         painter = painterResource(lampUiState.value.icons.colorPicker),
                         contentDescription = null
                     )
                 }
-                IconButton(
+               TextButton(
                     onClick = { intensityDialog.value = true },
-                    enabled = lampUiState.value.state == R.string.On
+                    enabled = lampUiState.value.state == R.string.On,
+                   modifier = Modifier.padding(start = 15.dp),
+                   colors = ButtonDefaults.buttonColors(
+                       contentColor = Color.Black,
+                       containerColor = Color.Transparent,
+                       disabledContainerColor = Color.Transparent
+                   )
                 ) {
-                    Icon(
+                   Text(text = stringResource(lampUiState.value.actions.inten))
+                   Icon(
                         painter = painterResource(lampUiState.value.icons.intense),
                         contentDescription = null,
                     )
@@ -116,13 +135,20 @@ fun LampCard(
             Surface(
                 modifier = Modifier
                     .width(365.dp)
-                    .height(150.dp),
+                    .height(100.dp),
                 shape = MaterialTheme.shapes.large,
                 tonalElevation = AlertDialogDefaults.TonalElevation
             ){
-                Text(text = lampUiState.value.intensity.toInt().toString())
+                Text(
+                    text = lampUiState.value.intensity.toString(),
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                )
 
-                Row() {
+                Row(
+                    modifier = Modifier
+                        .padding(top = 15.dp)
+                ) {
                     IconButton(onClick = {
                         lampViewModel.setIntensity(lampUiState.value.intensity - 1)
                     }) {
@@ -131,7 +157,7 @@ fun LampCard(
                     }
                     Slider(value = lampUiState.value.intensity.toFloat(),
                         onValueChange = {lampViewModel.setIntensity(it.toInt())},
-                        valueRange = 0f..10f,
+                        valueRange = 0f..100f,
                     modifier = Modifier.width(240.dp))
                     IconButton(onClick = {
                         lampViewModel.setIntensity(lampUiState.value.intensity + 1)
