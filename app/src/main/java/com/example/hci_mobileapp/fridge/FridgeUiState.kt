@@ -20,7 +20,7 @@ data class FridgeUiState (
     val icons: FridgeIcons = FridgeIcons(),
     val actions: FridgeActions = FridgeActions(),
     val name: String? = " ",
-    val freezerTemp: Int = -2,
+    val freezerTemp: Int = -17,
     val fridgeTemp: Int = 4,
     @ArrayRes val modes: Int = R.array.fridge_modes,
     val curMode: String = "Normal"

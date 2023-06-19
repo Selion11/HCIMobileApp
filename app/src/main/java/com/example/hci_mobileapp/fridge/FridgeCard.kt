@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,6 +40,7 @@ import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.model.ApiDevice
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FridgeCard(
     fridgeViewModel: FridgeViewModel = viewModel(),
@@ -53,10 +57,12 @@ fun FridgeCard(
 
     Surface(
         shape = MaterialTheme.shapes.small,
+        border = BorderStroke(width = 2.dp, color = Color.Black),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 5.dp),
-        border = BorderStroke(width = 2.dp, color = Color.Black),
+            .padding(horizontal = 5.dp)
+            .height(95.dp),
+        onClick = {dialogOpen.value = true}
     ) {
         Column(
             modifier = Modifier
@@ -69,9 +75,9 @@ fun FridgeCard(
                 fridgeState.value.name?.let {
                     Text(
                         text = it,
-                        fontSize = 8.sp,
+                        fontSize = 14.sp,
                         modifier = Modifier
-                            .padding(horizontal = 8.dp)
+                            .padding(horizontal = 8.dp),
                     )
                 }
             }
@@ -86,32 +92,61 @@ fun FridgeCard(
             Row {
                 Text(
                     text = "MODE: " + fridgeState.value.curMode,
-                    fontSize = 9.sp,
+                    fontSize = 14.sp,
                     modifier = Modifier
-                        .padding(horizontal = 7.dp)
+                        .padding(horizontal = 8.dp),
 
                 )
             }
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
             modifier = Modifier
-                .padding(top = 9.dp)
-                .height(55.dp)
-                .width(70.dp),
-            horizontalArrangement = Arrangement
-                .Center
-        ){
-            TextButton(onClick = { modesOpen.value = true },
-                border = BorderStroke(width = 2.dp, color = Color.Black),
-                shape = MaterialTheme.shapes.medium) {
-                Icon(painter = painterResource(fridgeState.value.icons.tune),
-                    contentDescription = null,
-                    modifier = Modifier,
-                    tint = Color.Black)
-                Text(text = "Mode", color = Color.Black)
+                .padding(horizontal = 45.dp),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp)
+                    .height(55.dp),
+                horizontalArrangement = Arrangement
+                    .Center
+            ){
+                TextButton(
+                    onClick = { modesOpen.value = true },
+                    modifier = Modifier.padding(start = 15.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        contentColor = Color.Black,
+                        containerColor = Color.Transparent,
+                        disabledContainerColor = Color.Transparent)
+                ){
+                    Icon(painter = painterResource(fridgeState.value.icons.tune),
+                        contentDescription = null,
+                        modifier = Modifier,
+                        tint = Color.Black)
+                    Text(text = stringResource(fridgeState.value.actions.mode))
+                }
+                TextButton(
+                    onClick = { fridgeViewModel.setTemp(fridgeState.value.fridgeTemp - 1) },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.minus),
+                        contentDescription = null)
+                }
+                Text(
+                    text = fridgeState.value.fridgeTemp.toString(),
+                    fontSize = 15.sp
+                )
+                TextButton(
+                    onClick = { fridgeViewModel.setTemp(fridgeState.value.fridgeTemp + 1) },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.baseline_add_24),
+                        contentDescription = null)
+                }
             }
         }
+
     }
 
     if (modesOpen.value) {
@@ -126,8 +161,15 @@ fun FridgeCard(
                 tonalElevation = AlertDialogDefaults.TonalElevation,
             ) {
                 Text(
-                    text = stringResource(id = R.string.modeMSG))
-                Row() {
+                    text = stringResource(id = R.string.modeMSG),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(start = 11.dp, bottom = 25.dp)
+                )
+                Row(
+                    modifier = Modifier
+                        .padding(top = 13.dp)
+                ) {
                     LazyRow(){
                         items(items = modes){
                                 item ->
@@ -147,6 +189,55 @@ fun FridgeCard(
                         }
                     ) {
                         Text(stringResource(id = R.string.confirmation))
+                    }
+                }
+            }
+        }
+    }
+
+    if (dialogOpen.value){
+
+        Dialog(
+            onDismissRequest = { dialogOpen.value = false }
+        ) {
+            Surface(  modifier = Modifier
+                .width(365.dp)
+                .height(90.dp),
+                shape = MaterialTheme.shapes.large,
+                tonalElevation = AlertDialogDefaults.TonalElevation
+            ) {
+                Text(
+                    text = "Freezer",
+                    modifier = Modifier
+                        .padding(start = 15.dp)
+                )
+                Column {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 18.dp),
+                        horizontalArrangement = Arrangement
+                            .Center
+                    ){
+                        TextButton(
+                            onClick = { fridgeViewModel.setFreezerTemp(fridgeState.value.freezerTemp - 1) },
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.minus),
+                                contentDescription = null)
+                        }
+                        Text(
+                            text = fridgeState.value.freezerTemp.toString(),
+                            fontSize = 15.sp
+                        )
+                        TextButton(
+                            onClick = { fridgeViewModel.setFreezerTemp(fridgeState.value.freezerTemp + 1) },
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.baseline_add_24),
+                                contentDescription = null)
+                        }
                     }
                 }
             }

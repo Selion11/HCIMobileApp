@@ -41,7 +41,6 @@
     <string name="automatic">Automatic</string>
     <!-- Apply to Fridge -->
     <string name="party">Party</string>
-    <string name="normal" translatable="false">Normal</string>
     <string name="vacation">Vacation</string>
     <string name="temperature">Temperature</string>
     <!-- Apply to faucet -->
@@ -108,7 +107,7 @@
     <string-array name="fridge_modes">
         <item>@string/party</item>
         <item>@string/vacation</item>
-        <item>@string/normal</item>
+        <item>@string/_default</item>
     </string-array>
     <!-- Apply to Faucet -->
     <string-array name="faucet_functions">
@@ -132,6 +131,7 @@
     <string name="horSwingMSg">Select a horizontal swing</string>
     <string name="vertSwingMsg">Select a vertical swing</string>
     <string name="vol">Volume</string>
+    <string name="_default" translatable="false">Default</string>
 
 
 </resources>

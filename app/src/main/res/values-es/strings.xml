@@ -71,7 +71,7 @@
     <string-array name="fridge_modes">
         <item>@string/party</item>
         <item>@string/vacation</item>
-        <item>@string/normal</item>
+        <item>@string/_default</item>
     </string-array>
     <!-- Apply to Faucet -->
     <string-array name="faucet_functions">
