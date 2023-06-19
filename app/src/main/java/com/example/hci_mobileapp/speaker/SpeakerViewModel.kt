@@ -20,8 +20,11 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     init {
         _speakerUiState.value = SpeakerUiState(
             name = device.name,
-            id=device.id
+            id=device.id,
+            state = "Stopped"
         )
+
+        setVolume(5)
     }
 
 
@@ -32,21 +35,20 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
     private var action: String? = null
 
-    fun iconSelectPlay(): Int?{
+    fun iconSelectPlay(): Int {
         return if(uiState.value.state == "Paused"){
-            uiState.value.icons?.pause
+            uiState.value.icons.pause
         } else
-            uiState.value.icons?.play
+            uiState.value.icons.play
     }
 
     fun playPause() {
         _speakerUiState.update { currentState ->
-            if (uiState.value.state == "Playing")
-                currentState.copy(state = "Paused")
-            if(uiState.value.state == "Stopped")
-                currentState.copy(state = "Playing")
-            else
-                currentState.copy(state = "Resuming")
+            when (uiState.value.state) {
+                "Playing" -> currentState.copy(state = "Paused")
+                "Stopped" -> currentState.copy(state = "Playing")
+                else -> currentState.copy(state = "Playing")
+            }
         }
 
         action = when(uiState.value.state){
@@ -68,21 +70,24 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     }
 
     fun setVolume(vol: Int){
-        action = "setVolume"
-        postJob = viewModelScope.launch {
-            runCatching {
-                RetrofitClient.getApiService().doActionInt(
-                    actionName = action.toString(),
-                    deviceID = uiState.value.id,
-                    params = listOf(vol)
-                )
+        if(vol < 0 || vol > 10){
+            //notifs
+        }else{
+            action = "setVolume"
+            postJob = viewModelScope.launch {
+                runCatching {
+                    RetrofitClient.getApiService().doActionInt(
+                        actionName = action.toString(),
+                        deviceID = uiState.value.id,
+                        params = listOf(vol)
+                    )
+                }
+            }
+
+            _speakerUiState.update {currentState ->
+                currentState.copy(volume = vol)
             }
         }
-
-        _speakerUiState.update {currentState ->
-            currentState.copy(volume = vol)
-        }
-
     }
 
     fun getPlaylist() {

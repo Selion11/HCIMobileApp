@@ -51,7 +51,7 @@ fun LampCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 5.dp)
-            .height(95.dp),
+            .height(95.dp)
     ) {
         Column(
             modifier = Modifier

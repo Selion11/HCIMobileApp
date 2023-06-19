@@ -66,7 +66,8 @@ fun SpeakerCard(
         border = BorderStroke(width = 2.dp, color = Color.Black),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 5.dp),
+            .padding(horizontal = 5.dp)
+            .height(95.dp),
         onClick = { openDialog.value = true }
     ) {
         Column(
@@ -80,9 +81,9 @@ fun SpeakerCard(
                 speakerUiState.value.name?.let {
                     Text(
                         text = it,
-                        fontSize = 8.sp,
+                        fontSize = 14.sp,
                         modifier = Modifier
-                            .padding(horizontal = 8.dp)
+                            .padding(horizontal = 8.dp),
                     )
                 }
             }
@@ -98,9 +99,9 @@ fun SpeakerCard(
             Row {
                 Text(
                     text = "Playing " + speakerUiState.value.currGen,
-                    fontSize = 9.sp,
+                    fontSize = 14.sp,
                     modifier = Modifier
-                        .padding(horizontal = 7.dp)
+                        .padding(horizontal = 8.dp)
 
                 )
             }
@@ -112,9 +113,10 @@ fun SpeakerCard(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .width(180.dp)
-                    .padding(10.dp)
-                    .height(55.dp)
+                    .fillMaxWidth()
+                    .padding(top = 18.dp)
+                    .height(55.dp),
+                horizontalArrangement = Arrangement.Center
             ) {
 
                 IconButton(onClick = { speakerViewModel.prevSong() }) {
@@ -126,12 +128,10 @@ fun SpeakerCard(
                 IconButton(
                     onClick ={ speakerViewModel.playPause() }
                 ) {
-                    speakerViewModel.iconSelectPlay()?.let { painterResource(it) }?.let {
-                        Icon(
-                            painter = it,
-                            contentDescription = null,
-                        )
-                    }
+                    Icon(
+                        painter = painterResource(speakerViewModel.iconSelectPlay()),
+                        contentDescription = null,
+                    )
                 }
                 IconButton(
                     onClick ={ speakerViewModel.stop() }
@@ -254,13 +254,18 @@ fun SpeakerCard(
             Surface(
                 modifier = Modifier
                     .width(365.dp)
-                    .height(150.dp),
+                    .height(100.dp),
                 shape = MaterialTheme.shapes.large,
                 tonalElevation = AlertDialogDefaults.TonalElevation
             ){
-                Text(text = speakerUiState.value.volume.toString())
+                Text(
+                    text = speakerUiState.value.volume.toString(),
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                )
 
-                Row() {
+                Row(  modifier = Modifier
+                    .padding(top = 15.dp)) {
                     IconButton(onClick = {
                         speakerViewModel.setVolume(speakerUiState.value.volume?.minus(1) ?: 0)
                     }) {
