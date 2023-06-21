@@ -2,12 +2,15 @@ package com.example.hci_mobileapp.data.network
 
 import com.example.hci_mobileapp.data.network.model.AllDevices
 import com.example.hci_mobileapp.data.network.model.Playlist
+import com.example.hci_mobileapp.data.network.model.faucetData
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Field
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService{
     @GET("/api/devices")
@@ -35,8 +38,7 @@ interface ApiService{
     suspend fun doActionMixed(
         @Path("actionName") actionName: String?,
         @Path("deviceID") deviceID: String?,
-        @Body quantity: Int,
-        @Body units: String
+        @Body params: faucetData,
     ): Response<Boolean>
 
 

@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
+import com.example.hci_mobileapp.data.network.model.faucetData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +31,7 @@ class FacuetViewModel(device: ApiDevice) : ViewModel() {
 
     private var action: String? = null
 
-    fun dispense(value: Int){
+    fun dispenser(value: Int){
         postJob?.cancel()
         action = "dispense"
         postJob =  viewModelScope.launch {
@@ -38,8 +39,7 @@ class FacuetViewModel(device: ApiDevice) : ViewModel() {
                 RetrofitClient.getApiService().doActionMixed(
                     actionName = action,
                     deviceID = uiState.value.id,
-                    quantity = value,
-                    units = uiState.value.dispenseUnits
+                    params = faucetData(value,uiState.value.dispenseUnits)
                 )
             }.onFailure {
                 /*Thorw Notification to user*/

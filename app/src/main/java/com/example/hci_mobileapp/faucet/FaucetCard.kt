@@ -169,7 +169,7 @@ fun FaucetCard(
                         }
                         TextButton(
                             onClick = {
-                                faucetViewModel.dispense(dispVal.toInt())
+                                faucetViewModel.dispenser(dispVal.toInt())
                             }
                         ){
                             Icon(
