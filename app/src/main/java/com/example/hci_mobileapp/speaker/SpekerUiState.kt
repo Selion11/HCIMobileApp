@@ -16,7 +16,8 @@ data class SpeakerIcons(
     @DrawableRes val genres: Int = R.drawable.baseline_music_note_24,
     @DrawableRes val stop: Int = R.drawable.stop,
     @DrawableRes val pause: Int = R.drawable.pause,
-    @DrawableRes val vol: Int = R.drawable.volume
+    @DrawableRes val vol: Int = R.drawable.volume,
+    @DrawableRes val song: Int = R.drawable.song
 
 )
 

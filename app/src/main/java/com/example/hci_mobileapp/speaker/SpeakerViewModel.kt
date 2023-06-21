@@ -94,10 +94,11 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
     fun getPlaylist() {
         postJob?.cancel()
+        action = "getPlaylist"
         postJob = viewModelScope.launch {
             runCatching {
                 RetrofitClient.getApiService().speakerPLaylistGet(
-                    actionName = action.toString(),
+                    actionName = action,
                     deviceID = uiState.value.id
                 )
             }.onSuccess {response ->
