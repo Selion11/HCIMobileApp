@@ -39,7 +39,7 @@ class DevicesViewModel: ViewModel(){
                RetrofitClient.getApiService().getAllDevices()
            }.onSuccess {response ->
                _devicesUiState.update {currentState ->
-                   currentState.copy(isLoading = false, devices = response.body())
+                   currentState.copy(isLoading = false, devices = response.body()?.devicesList)
                }
            }.onFailure {e ->
                _devicesUiState.update {currentState ->
