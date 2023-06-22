@@ -1,9 +1,13 @@
 package com.example.hci_mobileapp.devicesView
 
+<<<<<<< Updated upstream
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat.getSystemService
+=======
+import androidx.compose.runtime.remember
+>>>>>>> Stashed changes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.MainActivity
@@ -29,10 +33,12 @@ class DevicesViewModel: ViewModel(){
 
     private var fetchJob: Job? = null
 
+
     init {
         fetchAllDevices()
     }
 
+<<<<<<< Updated upstream
     val timerTask = Timer().schedule(timerTask { fetchAllDevices() },5000, 10000)
 
 
@@ -42,6 +48,8 @@ class DevicesViewModel: ViewModel(){
         }
     }*/
 
+=======
+>>>>>>> Stashed changes
     fun fetchAllDevices(){
         fetchJob?.cancel()
 

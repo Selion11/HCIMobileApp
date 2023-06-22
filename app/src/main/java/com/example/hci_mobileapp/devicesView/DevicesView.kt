@@ -26,7 +26,7 @@ import com.example.hci_mobileapp.speaker.SpeakerCard
 import com.example.hci_mobileapp.speaker.SpeakerViewModel
 
 @Composable
-fun renderDevices(
+fun RenderDevices(
     viewModel: DevicesViewModel = viewModel(),
 ) {
     val devicesViewUiState = viewModel.uiState.collectAsState()

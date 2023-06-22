@@ -7,6 +7,7 @@ import android.util.Log
 import com.example.hci_mobileapp.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ class ServerEventReceiver : BroadcastReceiver() {
 
     private val gson = Gson()
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onReceive(context: Context?, intent: Intent?) {
         Log.d(TAG, "Alarm received.")
 

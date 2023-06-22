@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
-import com.example.hci_mobileapp.notification.MyIntent
+import com.example.hci_mobileapp.devicesView.DevicesViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,7 +38,6 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
     private var postJob: Job? = null
 
     private var action: String? = null
-
 
     fun setTemp(temp: Int){
         postJob?.cancel()

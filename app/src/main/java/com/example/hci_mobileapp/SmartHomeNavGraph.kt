@@ -6,7 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.hci_mobileapp.devicesView.DevicesViewModel
-import com.example.hci_mobileapp.devicesView.renderDevices
+import com.example.hci_mobileapp.devicesView.RenderDevices
+
 
 @Composable
 fun SmartHomeNavGraph(navController: NavHostController, viewModel: DevicesViewModel) {
@@ -18,7 +19,7 @@ fun SmartHomeNavGraph(navController: NavHostController, viewModel: DevicesViewMo
             // RecentView()
         }
         composable(SmartHomeScreens.DeviceScreen.route) {
-            renderDevices(viewModel = viewModel)
+            RenderDevices(viewModel = viewModel)
         }
     }
 }
