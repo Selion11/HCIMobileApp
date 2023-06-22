@@ -69,6 +69,7 @@ import com.example.hci_mobileapp.ui.theme.ComposeColorPickerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.internal.toHexString
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -83,8 +84,14 @@ fun LampCard(
 
     val colorPickerDialog = remember { mutableStateOf(false) }
 
-/*    val hsv = remember {
-        val color = currentColor?.let { Color(it.toLong()) }
+    val hsv = remember {
+        val color = currentColor?.let {
+            Color(
+                Integer.valueOf(it.substring(0, 2), 16),
+                Integer.valueOf(it.substring(2, 4), 16),
+                Integer.valueOf(it.substring(4, 6), 16)
+            )
+        }
         val hsv = floatArrayOf(0f, 0f, 0f)
         if (color != null) {
             android.graphics.Color.RGBToHSV(
@@ -98,9 +105,9 @@ fun LampCard(
         mutableStateOf(
             Triple(hsv[0], hsv[1], hsv[2])
         )
-    }*/
+    }
 
-/*
+
     val backgroundColor = remember(hsv.value) {
         mutableStateOf(
             Color.hsv(
@@ -110,7 +117,7 @@ fun LampCard(
             )
         )
     }
-*/
+
 
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -259,11 +266,9 @@ fun LampCard(
         }
     }
 
-   /* if (colorPickerDialog.value) {
+    if (colorPickerDialog.value) {
         Dialog(onDismissRequest = { intensityDialog.value = false }) {
-            val newColor = remember {
-                mutableStateOf(" ")
-            } //lampViewModel.currentColor()
+            val newColor = remember { mutableStateOf(lampViewModel.currentColor()) }
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -319,7 +324,7 @@ fun LampCard(
                     TextButton(
                         onClick = {
                             colorPickerDialog.value = false
-                            lampViewModel.colorSet(newColor.value)
+                            newColor.value?.let { lampViewModel.colorSet(it.substring(2).uppercase()) }
                         },
                     ) {
                         Text(stringResource(id = R.string.confirmation))
@@ -329,9 +334,7 @@ fun LampCard(
         }
     }
 }
-*/
 
-/*
 @Composable
 fun HueBar(
     setColor: (Float) -> Unit
@@ -405,8 +408,8 @@ fun HueBar(
         )
 
     }
-}*/
-/*
+}
+
 fun CoroutineScope.collectForPress(
     interactionSource: InteractionSource,
     setOffset: (Offset) -> Unit
@@ -562,7 +565,7 @@ fun SatValPanel(
             radius = 2.dp.toPx(),
             center = pressOffset.value,
         )
-    }*/
+    }
 }
 
 // Color Picker Source Code: https://github.com/V-Abhilash-1999/ComposeColorPicker/blob/main/app/src/main/java/com/abhilash/apps/composecolorpicker/ui/theme/Theme.kt

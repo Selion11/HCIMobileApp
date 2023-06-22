@@ -1,6 +1,5 @@
 package com.example.hci_mobileapp.lamp
 
-import androidx.annotation.ColorLong
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.example.hci_mobileapp.R
@@ -23,6 +22,6 @@ data class LampUiState(
     val icons: LampIcons = LampIcons(),
     val actions: LampActions = LampActions(),
     val state: Int = R.string.Off,
-    @ColorLong val col: String? = " ",
+    val col: String? = "",
     val intensity: Int? = 50
 )
