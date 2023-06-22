@@ -79,6 +79,8 @@ class LampViewModel(device: ApiDevice): ViewModel() {
         }
     }
 
+    fun currentColor(): String = uiState.value.col
+
     fun setIntensity(intensity: Int){
         postJob?.cancel()
         action = "setBrightness"
