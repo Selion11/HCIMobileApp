@@ -5,31 +5,21 @@ import androidx.compose.material.BottomNavigationItem
 
 
 import android.os.Bundle
+
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.*
 import androidx.navigation.*
-import com.example.hci_mobileapp.devicesView.DevicesViewModel
-import com.example.hci_mobileapp.devicesView.renderDevices
+import com.example.hci_mobileapp.data.network.model.ApiDevice
+import com.example.hci_mobileapp.notification.ShowNotificationReceiver
 import com.example.hci_mobileapp.ui.theme.HCIMobileAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,7 +39,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(paddingValues),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                        SmartHomeNavGraph(navController = navController)
+                         SmartHomeNavGraph(navController = navController)
                     }
                 }
             }
@@ -88,12 +78,14 @@ fun BottomBar(navController: NavHostController) {
     }
 }
 
-@Composable
-fun dummyView(){
+/*@Composable
+fun dummyView() {
     Row(verticalAlignment = Alignment.Top) {
         Text(text = "Title Placeholder", textAlign = TextAlign.Center)
     }
-    Row(modifier = Modifier.padding(top= 50.dp), horizontalArrangement = Arrangement.Center) {
+    Row(modifier = Modifier.padding(top = 50.dp), horizontalArrangement = Arrangement.Center) {
         renderDevices()
     }
-}
+}*/
+
+

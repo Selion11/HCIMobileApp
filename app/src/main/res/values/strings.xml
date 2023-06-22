@@ -132,6 +132,8 @@
     <string name="vertSwingMsg">Select a vertical swing</string>
     <string name="vol">Volume</string>
     <string name="_default" translatable="false">Default</string>
+    <string name="channel_name" translatable="false">ApiNotif</string>
+    <string name="channel_description">Changes to devices via API</string>
 
 
 </resources>

@@ -24,6 +24,7 @@ import com.example.hci_mobileapp.fridge.FridgeCard
 import com.example.hci_mobileapp.fridge.FridgeViewModel
 import com.example.hci_mobileapp.lamp.LampCard
 import com.example.hci_mobileapp.lamp.LampViewModel
+import com.example.hci_mobileapp.notification.ShowNotificationReceiver
 import com.example.hci_mobileapp.speaker.SongRender
 import com.example.hci_mobileapp.speaker.SpeakerCard
 import com.example.hci_mobileapp.speaker.SpeakerViewModel
@@ -36,32 +37,6 @@ fun renderDevices(
 ) {
     val devicesViewUiState = viewModel.uiState.collectAsState()
     val devs = devicesViewUiState.value.devices
-
-    /*    Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 6.dp)
-    ){
-        Button(
-            onClick = { viewModel.fetchAllDevices() },
-            modifier = Modifier.align(CenterHorizontally)
-        ) {
-            Text(text = "FETCH")
-        }
-        val devices = devicesViewUiState.value.devices?.devicesList
-        if(devices != null) {
-            for(device in devices) {
-                when (device.type?.id) {
-                    "c89b94e8581855bc" -> SpeakerCard(speakerViewModel = SpeakerViewModel(device))
-                    "li6cbv5sdlatti0j" -> AcCard(acViewModel = AcViewModel(device))
-                    "rnizejqr2di0okho" -> FridgeCard(fridgeViewModel = FridgeViewModel(device))
-                    "dbrlsh7o5sn8ur4i" -> FaucetCard(faucetViewModel = FacuetViewModel(device))
-                    "go46xmbqeomjrsjr" -> LampCard(lampViewModel = LampViewModel(device))
-                }
-            }
-        }
-    }*/
    Column(
        verticalArrangement = Arrangement.spacedBy(8.dp),
        modifier = Modifier

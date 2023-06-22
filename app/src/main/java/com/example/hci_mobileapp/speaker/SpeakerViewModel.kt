@@ -1,13 +1,18 @@
 package com.example.hci_mobileapp.speaker
 
+import android.content.Context
 import androidx.compose.ui.res.stringResource
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hci_mobileapp.MainActivity
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
 import com.example.hci_mobileapp.data.network.model.Song
+import com.example.hci_mobileapp.notification.MyApplication
+import com.example.hci_mobileapp.notification.ShowNotificationReceiver
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,26 +22,36 @@ import kotlinx.coroutines.launch
 
 class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     private val _speakerUiState = MutableStateFlow(SpeakerUiState())
+    val alo = device
     init {
         _speakerUiState.value = SpeakerUiState(
             name = device.name,
             id= device.id,
-            state = "Stopped"
+            state = device.state?.status,
+            volume = device.state?.volume,
+            currGen = device.state?.genre
         )
 
         _speakerUiState.value.volume?.let { setVolume(it) }
+        _speakerUiState.value.currGen?.let { genreSet(it) }
     }
 
-
     val uiState :StateFlow<SpeakerUiState> = _speakerUiState.asStateFlow()
+/*
 
+    val notifs = ShowNotificationReceiver()
+
+    fun generateNotification(){
+        notifs.showNotification(MainActivity(),alo)
+    }
+*/
 
     private var postJob: Job? = null
 
     private var action: String? = null
 
     fun iconSelectPlay(): Int {
-        return if(uiState.value.state == "Paused"){
+        return if(uiState.value.state == "paused"){
             uiState.value.icons.pause
         } else
             uiState.value.icons.play
@@ -46,15 +61,15 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
         postJob?.cancel()
         _speakerUiState.update { currentState ->
             when (uiState.value.state) {
-                "Playing" -> currentState.copy(state = "Paused")
-                "Stopped" -> currentState.copy(state = "Playing")
-                else -> currentState.copy(state = "Playing")
+                "playing" -> currentState.copy(state = "paused")
+                "stopped" -> currentState.copy(state = "playing")
+                else -> currentState.copy(state = "playing")
             }
         }
 
         action = when(uiState.value.state){
-            "Paused" -> "pause"
-            "Playing" -> "play"
+            "paused" -> "pause"
+            "playing" -> "play"
             else -> "resume"
         }
         postJob = viewModelScope.launch {
@@ -142,7 +157,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
         fun stop() {
             postJob?.cancel()
             _speakerUiState.update { currentState ->
-                currentState.copy(state = "Stopped")
+                currentState.copy(state = "stopped")
             }
             action = "stop"
             postJob = viewModelScope.launch {
