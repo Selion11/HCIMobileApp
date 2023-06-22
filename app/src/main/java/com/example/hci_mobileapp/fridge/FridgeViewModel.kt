@@ -24,7 +24,9 @@ class FridgeViewModel(device: ApiDevice) : ViewModel() {
             id = device.id
         )
 
-        modeSet("Default")
+        device.state?.mode?.let { modeSet(it) }
+        device.state?.freezerTemperature?.let { setFreezerTemp(it) }
+        device.state?.temperature?.let { setTemp(it) }
     }
 
     val uiState: StateFlow<FridgeUiState> = _fridgeUiState.asStateFlow()

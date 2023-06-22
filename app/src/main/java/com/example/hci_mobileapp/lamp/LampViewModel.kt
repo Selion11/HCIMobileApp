@@ -21,7 +21,7 @@ class LampViewModel(device: ApiDevice): ViewModel() {
         _lampUiState.value = LampUiState(
             name = device.name,
             id = device.id,
-            col = device.state?.color,
+            //col = device.state?.color,
             intensity = device.state?.brightness,
             state = if(device.state?.status == "opened"){
                 R.string.On
@@ -86,8 +86,8 @@ class LampViewModel(device: ApiDevice): ViewModel() {
         }
     }
 
-    fun currentColor(): String{
-        return uiState.value.col.toString()
+    fun currentColor(): String? {
+        return uiState.value.col
     }
 
     fun setIntensity(intensity: Int){

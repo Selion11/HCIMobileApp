@@ -17,11 +17,6 @@ interface ApiService{
     @GET("/api/devices")
     suspend fun getAllDevices() : Response<AllDevices>
 
-    @GET("/api/devices/{deviceID}")
-    suspend fun getDevice(
-        @Path("deviceID") deviceID: String?
-    ) : Response<ApiDevice>
-
   /*  @GET("/devices/events")
     suspend fun getAllEvents() : Response<>
 

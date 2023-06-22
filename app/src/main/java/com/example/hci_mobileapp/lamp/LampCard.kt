@@ -81,14 +81,16 @@ fun LampCard(
     val colorPickerDialog = remember { mutableStateOf(false) }
 
     val hsv = remember {
-        val color = Color(currentColor.toLong())
+        val color = currentColor?.let { Color(it.toInt()) }
         val hsv = floatArrayOf(0f, 0f, 0f)
-        android.graphics.Color.RGBToHSV(
-            color.red.toInt(),
-            color.green.toInt(),
-            color.blue.toInt(),
-            hsv
-        )
+        if (color != null) {
+            android.graphics.Color.RGBToHSV(
+                color.red.toInt(),
+                color.green.toInt(),
+                color.blue.toInt(),
+                hsv
+            )
+        }
 
         mutableStateOf(
             Triple(hsv[0], hsv[1], hsv[2])
