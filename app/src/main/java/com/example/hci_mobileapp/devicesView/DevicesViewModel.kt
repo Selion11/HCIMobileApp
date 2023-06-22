@@ -1,5 +1,9 @@
 package com.example.hci_mobileapp.devicesView
 
+import android.app.AlarmManager
+import android.content.Context
+import android.content.Intent
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.MainActivity
@@ -13,6 +17,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Timer
+import java.util.TimerTask
+import kotlin.concurrent.timerTask
 
 class DevicesViewModel: ViewModel(){
 
@@ -25,6 +32,9 @@ class DevicesViewModel: ViewModel(){
     init {
         fetchAllDevices()
     }
+
+    val timerTask = Timer().schedule(timerTask { fetchAllDevices() },5000, 10000)
+
 
     /*fun dismissMessage(){
         _devicesUiState.update { currentState ->
