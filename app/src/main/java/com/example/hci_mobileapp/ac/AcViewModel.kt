@@ -2,6 +2,8 @@ package com.example.hci_mobileapp.ac
 
 
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
@@ -16,8 +18,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 
-class AcViewModel(device: ApiDevice) : ViewModel(){
+
+@RequiresApi(Build.VERSION_CODES.O)
+class AcViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(){
     private val _acUiState = MutableStateFlow(AcUiState())
+    private val par = parent
+    fun skipNoti(){
+        uiState.value.id?.let { par.notifGenerate(it) }
+    }
     init {
         _acUiState.value = AcUiState(
             name = device.name,
@@ -39,8 +47,12 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
 
     private var action: String? = null
 
+
+
+
     fun setTemp(temp: Int){
         postJob?.cancel()
+        skipNoti()
         action =  "setTemperature"
         postJob = viewModelScope.launch {
             runCatching {
@@ -66,8 +78,10 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
             R.drawable.airon
     }
 
+
     fun modeSwitch(mode: String){
         postJob?.cancel()
+        skipNoti()
         action = "setMode"
         postJob = viewModelScope.launch {
            runCatching {
@@ -97,8 +111,10 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
             else -> speed
         }
     }
+
     fun speedChange(speed: String){
         postJob?.cancel()
+        skipNoti()
         action = "setFanSpeed"
         postJob = viewModelScope.launch {
             runCatching {
@@ -115,8 +131,10 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
         postJob = null
     }
 
+
     fun horiSwingChange(value: String){
         postJob?.cancel()
+        skipNoti()
         action = "setHorizontalSwing"
         postJob = viewModelScope.launch {
             runCatching {
@@ -137,8 +155,10 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
         }
     }
 
+
     fun vertSwingChange(value: String){
         postJob?.cancel()
+        skipNoti()
         action = "setVerticalSwing"
         postJob = viewModelScope.launch {
             runCatching {
@@ -160,8 +180,11 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
     }
 
 
+
+
     fun turnOnOff(){
         postJob?.cancel()
+        skipNoti()
         _acUiState.update { currentState ->
             if (uiState.value.state == (R.string.Off))
                 currentState.copy(state =  R.string.On)

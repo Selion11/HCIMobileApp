@@ -1,20 +1,12 @@
 package com.example.hci_mobileapp.devicesView
 
-<<<<<<< Updated upstream
-import android.app.AlarmManager
-import android.content.Context
-import android.content.Intent
-import androidx.core.content.ContextCompat.getSystemService
-=======
-import androidx.compose.runtime.remember
->>>>>>> Stashed changes
+import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.MainActivity
 import com.example.hci_mobileapp.data.network.RetrofitClient
-import com.example.hci_mobileapp.data.network.model.AllDevices
-import com.example.hci_mobileapp.data.network.model.ApiDevice
-import com.example.hci_mobileapp.notification.MyApplication
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,10 +14,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Timer
-import java.util.TimerTask
 import kotlin.concurrent.timerTask
 
-class DevicesViewModel: ViewModel(){
+class DevicesViewModel(): ViewModel(){
 
     private val _devicesUiState = MutableStateFlow(DevicesUiState())
 
@@ -38,18 +29,24 @@ class DevicesViewModel: ViewModel(){
         fetchAllDevices()
     }
 
-<<<<<<< Updated upstream
     val timerTask = Timer().schedule(timerTask { fetchAllDevices() },5000, 10000)
 
 
-    /*fun dismissMessage(){
-        _devicesUiState.update { currentState ->
-            currentState.copy(MSG = null)
-        }
-    }*/
+    @SuppressLint("StaticFieldLeak")
+    private lateinit var mainActivity: MainActivity
 
-=======
->>>>>>> Stashed changes
+    fun setMainActivity(mainActivity: MainActivity) {
+        this.mainActivity = mainActivity
+    }
+
+    // Use the mainActivity reference to call its functions
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun notifGenerate(id: String) {
+        mainActivity.generateNotif(id)
+    }
+
+
+
     fun fetchAllDevices(){
         fetchJob?.cancel()
 

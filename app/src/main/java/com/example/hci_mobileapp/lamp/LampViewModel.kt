@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
+import com.example.hci_mobileapp.devicesView.DevicesViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,9 +14,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LampViewModel(device: ApiDevice): ViewModel() {
+class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
 
     private val _lampUiState = MutableStateFlow(LampUiState())
+
+    private val par = parent
+
+    fun skipNoti(){
+        uiState.value.id?.let { par.notifGenerate(it) }
+    }
 
     init {
         _lampUiState.value = LampUiState(

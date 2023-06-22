@@ -1,18 +1,13 @@
 package com.example.hci_mobileapp.speaker
 
-import android.content.Context
-import androidx.compose.ui.res.stringResource
-import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getString
+
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hci_mobileapp.MainActivity
-import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
-import com.example.hci_mobileapp.data.network.model.Song
-import com.example.hci_mobileapp.notification.MyApplication
-import com.example.hci_mobileapp.notification.ShowNotificationReceiver
+import com.example.hci_mobileapp.devicesView.DevicesViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,9 +15,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SpeakerViewModel(device: ApiDevice) : ViewModel() {
+@RequiresApi(Build.VERSION_CODES.O)
+class SpeakerViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel() {
     private val _speakerUiState = MutableStateFlow(SpeakerUiState())
-    val alo = device
+
+    private val par = parent
+
+    fun skipNoti(){
+        uiState.value.id?.let { par.notifGenerate(it) }
+    }
     init {
         _speakerUiState.value = SpeakerUiState(
             name = device.name,
@@ -34,14 +35,6 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     }
 
     val uiState :StateFlow<SpeakerUiState> = _speakerUiState.asStateFlow()
-/*
-
-    val notifs = ShowNotificationReceiver()
-
-    fun generateNotification(){
-        notifs.showNotification(MainActivity(),alo)
-    }
-*/
 
     private var postJob: Job? = null
 
@@ -56,7 +49,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
     fun playPause() {
         postJob?.cancel()
-
+        skipNoti()
         action = when(uiState.value.state){
             "stopped" -> "play"
             "playing" -> "pause"
@@ -83,6 +76,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
     fun setVolume(vol: Int){
         postJob?.cancel()
+        skipNoti()
         if(vol < 0 || vol > 10){
             //notifs
         }else{
@@ -105,6 +99,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
     fun getPlaylist() {
         postJob?.cancel()
+        skipNoti()
         action = "getPlaylist"
         postJob = viewModelScope.launch {
             runCatching {
@@ -122,6 +117,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
         fun nextSong() {
             postJob?.cancel()
+            skipNoti()
             action = "nextSong"
             postJob = viewModelScope.launch {
                 runCatching {
@@ -137,6 +133,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
         fun prevSong() {
             postJob?.cancel()
+            skipNoti()
             action = "previousSong"
             postJob = viewModelScope.launch {
                 runCatching {
@@ -152,6 +149,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
         fun stop() {
             postJob?.cancel()
+            skipNoti()
             _speakerUiState.update { currentState ->
                 currentState.copy(state = "stopped")
             }
@@ -171,6 +169,7 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
 
         fun genreSet(g: String) {
             postJob?.cancel()
+            skipNoti()
             action = "setGenre"
             postJob = viewModelScope.launch {
                 kotlin.runCatching {

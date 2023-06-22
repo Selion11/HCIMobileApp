@@ -50,7 +50,7 @@ fun RenderDevices(
                 items(items = devs) { item ->
                     when (item.type?.id) {
                         "c89b94e8581855bc" -> SpeakerCard(speakerViewModel = SpeakerViewModel(item))
-                        "li6cbv5sdlatti0j" -> AcCard(acViewModel = AcViewModel(item))
+                        "li6cbv5sdlatti0j" -> AcCard(acViewModel = AcViewModel(item,viewModel))
                         "rnizejqr2di0okho" -> FridgeCard(fridgeViewModel = FridgeViewModel(item))
                         "dbrlsh7o5sn8ur4i" -> FaucetCard(faucetViewModel = FaucetViewModel(item))
                         "go46xmbqeomjrsjr" -> LampCard(lampViewModel = LampViewModel(item))

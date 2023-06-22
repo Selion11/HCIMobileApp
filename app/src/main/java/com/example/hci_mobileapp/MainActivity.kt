@@ -66,11 +66,27 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
+                        deviceModel.setMainActivity(this)
                         SmartHomeNavGraph(navController = navController,deviceModel)
                     }
                 }
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun generateNotif(id: String){
+        receiver = SkipNotificationReceiver(id)
+        IntentFilter(MyIntent.SHOW_NOTIFICATION)
+            .apply { priority = 1 }
+            .also {
+                var flags = 0
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    flags = Context.RECEIVER_NOT_EXPORTED
+                registerReceiver(receiver, it, flags)
+            }
+
+
     }
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStart() {
