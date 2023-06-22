@@ -2,7 +2,6 @@ package com.example.hci_mobileapp.devicesView
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,17 +15,14 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.hci_mobileapp.MainActivity
 import com.example.hci_mobileapp.ac.AcCard
 import com.example.hci_mobileapp.ac.AcViewModel
-import com.example.hci_mobileapp.faucet.FacuetViewModel
+import com.example.hci_mobileapp.faucet.FaucetViewModel
 import com.example.hci_mobileapp.faucet.FaucetCard
 import com.example.hci_mobileapp.fridge.FridgeCard
 import com.example.hci_mobileapp.fridge.FridgeViewModel
 import com.example.hci_mobileapp.lamp.LampCard
 import com.example.hci_mobileapp.lamp.LampViewModel
-import com.example.hci_mobileapp.notification.ShowNotificationReceiver
-import com.example.hci_mobileapp.speaker.SongRender
 import com.example.hci_mobileapp.speaker.SpeakerCard
 import com.example.hci_mobileapp.speaker.SpeakerViewModel
 
@@ -59,7 +55,7 @@ fun renderDevices(
                         "c89b94e8581855bc" -> SpeakerCard(speakerViewModel = SpeakerViewModel(item))
                         "li6cbv5sdlatti0j" -> AcCard(acViewModel = AcViewModel(item))
                         "rnizejqr2di0okho" -> FridgeCard(fridgeViewModel = FridgeViewModel(item))
-                        "dbrlsh7o5sn8ur4i" -> FaucetCard(faucetViewModel = FacuetViewModel(item))
+                        "dbrlsh7o5sn8ur4i" -> FaucetCard(faucetViewModel = FaucetViewModel(item))
                         "go46xmbqeomjrsjr" -> LampCard(lampViewModel = LampViewModel(item))
                     }
                 }

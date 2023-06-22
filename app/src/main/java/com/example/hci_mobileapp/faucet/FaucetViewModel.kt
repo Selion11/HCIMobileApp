@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
-import com.example.hci_mobileapp.data.network.model.faucetData
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class FacuetViewModel(device: ApiDevice) : ViewModel() {
+class FaucetViewModel(device: ApiDevice) : ViewModel() {
 
     private val _faucetUiState = MutableStateFlow(FaucetUiState())
 
@@ -44,10 +43,20 @@ class FacuetViewModel(device: ApiDevice) : ViewModel() {
                     deviceID = uiState.value.id,
                     params = arrayOf(value,uiState.value.dispenseUnits)
                 )
+
             }.onFailure {
                 /*Thorw Notification to user*/
             }
         }
+
+        _faucetUiState.update { currentState ->
+            if (uiState.value.state == (R.string.Off))
+                currentState.copy(state =  R.string.On)
+            else
+                currentState.copy(state =  R.string.Off)
+        }
+
+        postJob = null
     }
     fun setDispenseUnit(units: String){
        _faucetUiState.update { currentState ->

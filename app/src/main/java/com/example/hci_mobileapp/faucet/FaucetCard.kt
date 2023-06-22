@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,9 +16,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,19 +33,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.R
-import com.example.hci_mobileapp.data.network.model.ApiDevice
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FaucetCard(
-    faucetViewModel: FacuetViewModel = viewModel(),
+    faucetViewModel: FaucetViewModel = viewModel(),
 ){
     val faucetUiState = faucetViewModel.uiState.collectAsState()
 
@@ -123,7 +119,7 @@ fun FaucetCard(
             ) {
 
               TextButton(onClick = {dispenseDialog = true  },
-                    enabled = faucetUiState.value.state == R.string.On,
+                    enabled = faucetUiState.value.state == R.string.Off,
                     colors = ButtonDefaults.buttonColors(
                         contentColor = Color.Black,
                         containerColor = Color.Transparent,
@@ -151,15 +147,22 @@ fun FaucetCard(
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly
+                        horizontalArrangement = Arrangement.Center
                     ) {
-                        OutlinedTextField(
-                            value = dispVal,
-                            onValueChange = {dispVal = it},
-                            singleLine = true
+                        Slider(
+                            value = dispVal.toFloat(),
+                            onValueChange = { dispVal = it.toInt().toString() },
+                            valueRange = 1f..100f,
+                            modifier = Modifier.width(240.dp)
                         )
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(dispVal.toString() + " " + faucetUiState.value.dispenseUnits)
                     }
                     Row(){
                         TextButton(onClick = { unitsDialog = true }) {
@@ -170,6 +173,7 @@ fun FaucetCard(
                         TextButton(
                             onClick = {
                                 faucetViewModel.dispenser(dispVal.toInt())
+                                dispenseDialog = false
                             }
                         ){
                             Icon(
