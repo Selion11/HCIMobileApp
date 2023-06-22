@@ -8,6 +8,8 @@ import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.RectF
 import android.graphics.Shader
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -68,6 +70,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.internal.toHexString
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LampCard(
     lampViewModel: LampViewModel = viewModel()
@@ -79,7 +82,7 @@ fun LampCard(
     val intensityDialog = remember { mutableStateOf(false) }
 
     val colorPickerDialog = remember { mutableStateOf(false) }
-/*
+
     val hsv = remember {
         val color = currentColor?.let { Color(it.toULong()) }
         val hsv = floatArrayOf(0f, 0f, 0f)
@@ -95,9 +98,9 @@ fun LampCard(
         mutableStateOf(
             Triple(hsv[0], hsv[1], hsv[2])
         )
-    }*/
+    }
 
-/*    val backgroundColor = remember(hsv.value) {
+    val backgroundColor = remember(hsv.value) {
         mutableStateOf(
             Color.hsv(
                 hsv.value.first,
@@ -105,7 +108,7 @@ fun LampCard(
                 hsv.value.third
             )
         )
-    }*/
+    }
 
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -254,7 +257,7 @@ fun LampCard(
         }
     }
 
-/*    if (colorPickerDialog.value) {
+    if (colorPickerDialog.value) {
         Dialog(onDismissRequest = { intensityDialog.value = false }) {
             val newColor = remember {
                 mutableStateOf(" ")
@@ -322,7 +325,7 @@ fun LampCard(
                 }
             }
         }
-    }*/
+    }
 }
 
 

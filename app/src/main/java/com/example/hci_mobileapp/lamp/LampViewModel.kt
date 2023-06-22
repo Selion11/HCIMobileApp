@@ -28,9 +28,9 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
         _lampUiState.value = LampUiState(
             name = device.name,
             id = device.id,
-            //col = device.state?.color,
+            col = device.state?.color,
             intensity = device.state?.brightness,
-            state = if(device.state?.status == "opened"){
+            state = if(device.state?.status == "on"){
                 R.string.On
             }else {
                 R.string.Off
@@ -61,14 +61,8 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
     fun turnOnOff(){
         postJob?.cancel()
         skipNoti()
-        _lampUiState.update { currentState ->
-            if (uiState.value.state == (R.string.Off))
-                currentState.copy(state =  R.string.On)
-            else
-                currentState.copy(state =  R.string.Off)
-        }
 
-        action = if(uiState.value.state ==(R.string.Off)){
+        action = if(uiState.value.state == (R.string.On)){
             "turnOff"
         }else
             "turnOn"
@@ -77,10 +71,16 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
                 RetrofitClient.getApiService().doActionBool(
                     actionName = action.toString(),
                     deviceID = uiState.value.id)
-            }.onFailure {
-                /*Thorw Notification to user*/
             }
         }
+
+        _lampUiState.update { currentState ->
+            if (uiState.value.state == (R.string.Off))
+                currentState.copy(state = R.string.On)
+            else
+                currentState.copy(state = R.string.Off)
+        }
+        postJob = null
     }
 
     fun colorSet(colorToSet: String){
@@ -96,9 +96,12 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
                 )
             }
         }
+
         _lampUiState.update { currentState ->
             currentState.copy(col = colorToSet)
         }
+
+        postJob = null
     }
 
     fun currentColor(): String? {
@@ -118,8 +121,11 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
                 )
             }
         }
+
         _lampUiState.update { currentState ->
             currentState.copy(intensity = intensity)
         }
+
+        postJob = null
     }
 }

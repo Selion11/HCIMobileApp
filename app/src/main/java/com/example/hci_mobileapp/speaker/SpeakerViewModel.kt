@@ -91,12 +91,14 @@ class SpeakerViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(
                         deviceID = uiState.value.id,
                         params = listOf(vol)
                     )
+                }.onSuccess {
+                    _speakerUiState.update {currentState ->
+                        currentState.copy(volume = vol)
+                    }
                 }
             }
 
-            _speakerUiState.update {currentState ->
-                currentState.copy(volume = vol)
-            }
+            postJob = null
         }
     }
 
@@ -116,6 +118,8 @@ class SpeakerViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(
                 }
             }
         }
+
+        postJob = null
     }
 
         fun nextSong() {
@@ -132,6 +136,8 @@ class SpeakerViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(
                     /*Thorw Notification to user*/
                 }
             }
+
+            postJob = null
         }
 
         fun prevSong() {
@@ -181,11 +187,12 @@ class SpeakerViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(
                         deviceID = uiState.value.id,
                         params = listOf(g.lowercase())
                     )
+                }.onSuccess {
+                    _speakerUiState.update { currentState ->
+                        currentState.copy(currGen = g)
+                    }
                 }
             }
-            _speakerUiState.update { currentState ->
-                currentState.copy(currGen = g)
 
-            }
         }
 }
