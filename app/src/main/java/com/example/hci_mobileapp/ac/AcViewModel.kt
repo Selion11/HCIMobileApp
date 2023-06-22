@@ -6,6 +6,7 @@ import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,16 +20,15 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
         _acUiState.value = AcUiState(
             name = device.name,
             id = device.id,
-            mode = "Auto",
-            vertValue = "Auto",
-            horVal = "Auto",
-            speed = "Auto",
+            state = if(device.state?.status == "on"){
+                R.string.On
+            }else R.string.Off
         )
-        setTemp(24)
-        modeSwitch("Cool")
-        speedChange("Automatic")
-        vertSwingChange("Automatic")
-        horiSwingChange("Automatic")
+        device.state?.temperature?.let { setTemp(it) }
+        device.state?.mode?.let { modeSwitch(it) }
+        device.state?.fanSpeed?.let { speedChange(it) }
+        device.state?.verticalSwing?.let { vertSwingChange(it) }
+        device.state?.horizontalSwing?.let { horiSwingChange(it) }
     }
 
     val uiState: StateFlow<AcUiState> = _acUiState.asStateFlow()

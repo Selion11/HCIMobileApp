@@ -1,29 +1,43 @@
 package com.example.hci_mobileapp
 
+import android.content.Context
+import android.content.IntentFilter
+import android.os.Build
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 
 
 import android.os.Bundle
 
+import android.Manifest
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.*
 import androidx.navigation.*
-import com.example.hci_mobileapp.data.network.model.ApiDevice
-import com.example.hci_mobileapp.notification.ShowNotificationReceiver
+import com.example.hci_mobileapp.notification.MyIntent
+import com.example.hci_mobileapp.notification.SkipNotificationReceiver
 import com.example.hci_mobileapp.ui.theme.HCIMobileAppTheme
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionRequired
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.rememberPermissionState
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
+    private lateinit var receiver: SkipNotificationReceiver
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -39,13 +53,64 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(paddingValues),
                         color = MaterialTheme.colorScheme.background
                     ) {
-                         SmartHomeNavGraph(navController = navController)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val permissionState =
+                                rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+                            if (!permissionState.hasPermission) {
+                                NotificationPermission(permissionState = permissionState)
+                                LaunchedEffect(true) {
+                                    permissionState.launchPermissionRequest()
+                                }
+                            }
+                        }
+                        SmartHomeNavGraph(navController = navController)
                     }
                 }
             }
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onStart() {
+        super.onStart()
+        receiver = SkipNotificationReceiver(DEVICE_ID)
+        IntentFilter(MyIntent.SHOW_NOTIFICATION)
+            .apply {
+                priority = 1
+            }
+            .also {
+                var flags = 0
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    flags = Context.RECEIVER_NOT_EXPORTED
+                registerReceiver(receiver, it, flags)
+            }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(receiver)
+    }
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    @Composable
+    fun NotificationPermission(
+        permissionState: PermissionState,
+    ) {
+        PermissionRequired(
+            permissionState = permissionState,
+            permissionNotGrantedContent = {  },
+            permissionNotAvailableContent = {  }
+        ) {
+
+        }
+    }
+
+    companion object {
+        // TODO: valor fijo, cambiar por un valor de dispositivo válido.
+        private const val DEVICE_ID = "0c5574bfcc385fa3"
+    }
 }
+
+
 
 @Composable
 fun BottomBar(navController: NavHostController) {
@@ -77,6 +142,7 @@ fun BottomBar(navController: NavHostController) {
         }
     }
 }
+
 
 /*@Composable
 fun dummyView() {

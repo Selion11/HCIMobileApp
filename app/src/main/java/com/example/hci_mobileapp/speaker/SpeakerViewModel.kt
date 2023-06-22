@@ -28,12 +28,9 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
             name = device.name,
             id= device.id,
             state = device.state?.status,
-            volume = device.state?.volume,
-            currGen = device.state?.genre
         )
-
-        _speakerUiState.value.volume?.let { setVolume(it) }
-        _speakerUiState.value.currGen?.let { genreSet(it) }
+        device.state?.volume?.let { setVolume(it) }
+        device.state?.genre?.let { genreSet(it) }
     }
 
     val uiState :StateFlow<SpeakerUiState> = _speakerUiState.asStateFlow()

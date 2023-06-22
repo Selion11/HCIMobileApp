@@ -210,21 +210,23 @@ fun LampCard(
                         .padding(top = 15.dp)
                 ) {
                     IconButton(onClick = {
-                        lampViewModel.setIntensity(lampUiState.value.intensity - 1)
+                        lampViewModel.setIntensity(lampUiState.value.intensity?.minus(1) ?: 0 )
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.minus),
                             contentDescription = null
                         )
                     }
-                    Slider(
-                        value = lampUiState.value.intensity.toFloat(),
-                        onValueChange = { lampViewModel.setIntensity(it.toInt()) },
-                        valueRange = 0f..100f,
-                        modifier = Modifier.width(240.dp)
-                    )
+                    lampUiState.value.intensity?.let {
+                        Slider(
+                            value = it.toFloat(),
+                            onValueChange = { lampViewModel.setIntensity(it.toInt()) },
+                            valueRange = 0f..100f,
+                            modifier = Modifier.width(240.dp)
+                        )
+                    }
                     IconButton(onClick = {
-                        lampViewModel.setIntensity(lampUiState.value.intensity + 1)
+                        lampViewModel.setIntensity(lampUiState.value.intensity?.plus(1) ?: 0)
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_add_24),
@@ -252,7 +254,9 @@ fun LampCard(
 
     if (colorPickerDialog.value) {
         Dialog(onDismissRequest = { intensityDialog.value = false }) {
-            var newColor: String = lampViewModel.currentColor()
+            var newColor = remember {
+                mutableStateOf(" ")
+            } //lampViewModel.currentColor()
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -274,13 +278,12 @@ fun LampCard(
 
                         SatValPanel(hue = hsv.value.first) { sat, value ->
                             hsv.value = Triple(hsv.value.first, sat, value)
-
-                            newColor = android.graphics.Color
-                                                    .HSVToColor(floatArrayOf(hsv.value.first, hsv.value.second, hsv.value.third))
-                                                    .toHexString()
+                            newColor.value = android.graphics.Color
+                                .HSVToColor(floatArrayOf(hsv.value.first, hsv.value.second, hsv.value.third))
+                                .toHexString()
 
                         }
-
+                        Text(text = "Here Here ${newColor.value}")
                         Spacer(modifier = Modifier.height(32.dp))
 
                         HueBar { hue ->
@@ -289,11 +292,11 @@ fun LampCard(
 
                         Spacer(modifier = Modifier.height(32.dp))
 
-                        Box(
+                     /*   Box(
                             modifier = Modifier
                                 .size(100.dp)
                                 .background(backgroundColor.value)
-                        )
+                        )*/
                     }
                 }
                 Spacer(modifier = Modifier.height(12.dp))
@@ -304,7 +307,7 @@ fun LampCard(
                     TextButton(
                         onClick = {
                             colorPickerDialog.value = false
-                            lampViewModel.colorSet(newColor)
+                            //lampViewModel.colorSet(newColor.value)
                         },
                     ) {
                         Text(stringResource(id = R.string.confirmation))

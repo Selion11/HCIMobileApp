@@ -20,7 +20,10 @@ class FacuetViewModel(device: ApiDevice) : ViewModel() {
     init {
         _faucetUiState.value = FaucetUiState(
             name = device.name,
-            id = device.id
+            id = device.id,
+            state = if(device.state?.status == "opened"){
+                R.string.On
+            }else R.string.Off
         )
     }
 
@@ -39,7 +42,7 @@ class FacuetViewModel(device: ApiDevice) : ViewModel() {
                 RetrofitClient.getApiService().doActionMixed(
                     actionName = action,
                     deviceID = uiState.value.id,
-                    params = faucetData(value,uiState.value.dispenseUnits)
+                    params = arrayOf(value,uiState.value.dispenseUnits)
                 )
             }.onFailure {
                 /*Thorw Notification to user*/

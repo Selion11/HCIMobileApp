@@ -1,10 +1,9 @@
-package ar.edu.itba.example.notification
+package com.example.hci_mobileapp.notification
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.example.hci_mobileapp.notification.MyIntent
 
 class SkipNotificationReceiver(private val deviceId: String) : BroadcastReceiver() {
 

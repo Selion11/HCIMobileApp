@@ -1,5 +1,5 @@
-package com.example.hci_mobileapp.notification/*
-
+package com.example.hci_mobileapp.notification
+/*
 import android.Manifest
 import android.content.Context
 import android.content.IntentFilter
@@ -84,8 +84,8 @@ class MainActivity : ComponentActivity() {
     ) {
         PermissionRequired(
             permissionState = permissionState,
-            permissionNotGrantedContent = { *//* TODO: función para infromarle al usuario de la necesidad de otrogar el permiso *//* },
-            permissionNotAvailableContent = { *//* TODO: función hacer las adecuaciones a la App debido a que el permiso no fue otorgado  *//* }
+            permissionNotGrantedContent = {  },
+            permissionNotAvailableContent = {  }
         ) {
             *//* Hacer uso del recurso porque el permiso fue otorgado *//*
         }

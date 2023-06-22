@@ -10,23 +10,25 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.hci_mobileapp.MainActivity
 import com.example.hci_mobileapp.R
+import com.example.hci_mobileapp.data.network.ApiService
+import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
 import com.example.hci_mobileapp.speaker.SpeakerViewModel
 
 class ShowNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent?.action == MyIntent.SHOW_NOTIFICATION) {
+        if (intent.action == MyIntent.SHOW_NOTIFICATION) {
             val deviceId: String? = intent.getStringExtra(MyIntent.DEVICE_ID)
             Log.d(TAG, "Show notification intent received {$deviceId)")
 
-            //showNotification(context, deviceId!!)
+            showNotification(context,deviceId!!)
         }
     }
 
-    fun showNotification(context: Context, device: ApiDevice) {
+    private fun showNotification(context: Context, device: String) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra(MyIntent.DEVICE_ID, device.id)
+            putExtra(MyIntent.DEVICE_ID, device)
         }
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -39,9 +41,10 @@ class ShowNotificationReceiver : BroadcastReceiver() {
             }
         )
 
+
         val builder = NotificationCompat.Builder(context, MyApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.notifications)
-            .setContentTitle(device.name.toString())
+            .setContentTitle(device)
             .setStyle(
                 NotificationCompat.BigTextStyle()
             )
@@ -53,8 +56,9 @@ class ShowNotificationReceiver : BroadcastReceiver() {
 
         try {
             val notificationManager = NotificationManagerCompat.from(context)
-            if (notificationManager.areNotificationsEnabled())
-                notificationManager.notify(device.id.hashCode(), builder.build())
+            if (notificationManager.areNotificationsEnabled()){
+                notificationManager.notify(device.hashCode(), builder.build())
+            }
         } catch (e: SecurityException) {
             Log.d(TAG, "Notification permission not granted $e")
         }

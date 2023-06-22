@@ -20,11 +20,15 @@ class DevicesViewModel: ViewModel(){
 
     private var fetchJob: Job? = null
 
-    fun dismissMessage(){
+    init {
+        fetchAllDevices()
+    }
+
+    /*fun dismissMessage(){
         _devicesUiState.update { currentState ->
             currentState.copy(MSG = null)
         }
-    }
+    }*/
 
 
     fun fetchAllDevices(){

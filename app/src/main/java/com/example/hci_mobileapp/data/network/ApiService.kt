@@ -1,6 +1,7 @@
 package com.example.hci_mobileapp.data.network
 
 import com.example.hci_mobileapp.data.network.model.AllDevices
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 import com.example.hci_mobileapp.data.network.model.Playlist
 import com.example.hci_mobileapp.data.network.model.faucetData
 import retrofit2.Response
@@ -15,6 +16,11 @@ import retrofit2.http.Query
 interface ApiService{
     @GET("/api/devices")
     suspend fun getAllDevices() : Response<AllDevices>
+
+    @GET("/api/devices/{deviceID}")
+    suspend fun getDevice(
+        @Path("deviceID") deviceID: String?
+    ) : Response<ApiDevice>
 
   /*  @GET("/devices/events")
     suspend fun getAllEvents() : Response<>
@@ -38,7 +44,7 @@ interface ApiService{
     suspend fun doActionMixed(
         @Path("actionName") actionName: String?,
         @Path("deviceID") deviceID: String?,
-        @Body params: faucetData,
+        @Body params: Array<*>,
     ): Response<Boolean>
 
 

@@ -41,5 +41,6 @@ data class AcUiState(
     val horVal: String? = " ",
     val speed: String? = " ",
     val temperature: Int = 24,
-    val state: Int = R.string.Off
+    val state: Int = R.string.Off,
+    val stateFlag: Boolean = false,
 )

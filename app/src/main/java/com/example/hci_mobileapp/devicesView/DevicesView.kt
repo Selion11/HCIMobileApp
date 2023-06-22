@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.hci_mobileapp.MainActivity
 import com.example.hci_mobileapp.ac.AcCard
 import com.example.hci_mobileapp.ac.AcViewModel
 import com.example.hci_mobileapp.faucet.FacuetViewModel

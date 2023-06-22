@@ -10,7 +10,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
 import android.util.Log
-import androidx.core.content.ContextCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.hci_mobileapp.R
 
 class MyApplication : Application() {
@@ -37,17 +37,9 @@ class MyApplication : Application() {
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
             }
-
-            val notificationManager : NotificationManager =
-                ContextCompat.getSystemService(
-                    this,
-                    NotificationManager::class.java) as NotificationManager
-
-            notificationManager.createNotificationChannel(channel)
-
-          /*  with(NotificationManagerCompat.from(this)) {
+           with(NotificationManagerCompat.from(this)) {
                 createNotificationChannel(channel)
-            }*/
+            }
         }
     }
 
