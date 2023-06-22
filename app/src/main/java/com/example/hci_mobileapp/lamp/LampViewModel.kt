@@ -28,7 +28,7 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
         _lampUiState.value = LampUiState(
             name = device.name,
             id = device.id,
-            col = device.state?.color,
+            //col = device.state?.color,
             intensity = device.state?.brightness,
             state = if(device.state?.status == "on"){
                 R.string.On

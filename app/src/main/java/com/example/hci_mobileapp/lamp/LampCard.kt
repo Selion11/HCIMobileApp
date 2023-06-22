@@ -83,8 +83,8 @@ fun LampCard(
 
     val colorPickerDialog = remember { mutableStateOf(false) }
 
-    val hsv = remember {
-        val color = currentColor?.let { Color(it.toULong()) }
+/*    val hsv = remember {
+        val color = currentColor?.let { Color(it.toLong()) }
         val hsv = floatArrayOf(0f, 0f, 0f)
         if (color != null) {
             android.graphics.Color.RGBToHSV(
@@ -98,8 +98,9 @@ fun LampCard(
         mutableStateOf(
             Triple(hsv[0], hsv[1], hsv[2])
         )
-    }
+    }*/
 
+/*
     val backgroundColor = remember(hsv.value) {
         mutableStateOf(
             Color.hsv(
@@ -109,6 +110,7 @@ fun LampCard(
             )
         )
     }
+*/
 
     Surface(
         shape = MaterialTheme.shapes.small,
@@ -257,7 +259,7 @@ fun LampCard(
         }
     }
 
-    if (colorPickerDialog.value) {
+   /* if (colorPickerDialog.value) {
         Dialog(onDismissRequest = { intensityDialog.value = false }) {
             val newColor = remember {
                 mutableStateOf(" ")
@@ -327,9 +329,9 @@ fun LampCard(
         }
     }
 }
+*/
 
-
-
+/*
 @Composable
 fun HueBar(
     setColor: (Float) -> Unit
@@ -403,8 +405,8 @@ fun HueBar(
         )
 
     }
-}
-
+}*/
+/*
 fun CoroutineScope.collectForPress(
     interactionSource: InteractionSource,
     setOffset: (Offset) -> Unit
@@ -560,7 +562,7 @@ fun SatValPanel(
             radius = 2.dp.toPx(),
             center = pressOffset.value,
         )
-    }
+    }*/
 }
 
 // Color Picker Source Code: https://github.com/V-Abhilash-1999/ComposeColorPicker/blob/main/app/src/main/java/com/abhilash/apps/composecolorpicker/ui/theme/Theme.kt
