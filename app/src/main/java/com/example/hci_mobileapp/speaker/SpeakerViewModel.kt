@@ -48,25 +48,18 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
     private var action: String? = null
 
     fun iconSelectPlay(): Int {
-        return if(uiState.value.state == "paused"){
-            uiState.value.icons.pause
-        } else
+        return if(uiState.value.state == "paused" || uiState.value.state == "stopped"){
             uiState.value.icons.play
+        } else
+            uiState.value.icons.pause
     }
 
     fun playPause() {
         postJob?.cancel()
-        _speakerUiState.update { currentState ->
-            when (uiState.value.state) {
-                "playing" -> currentState.copy(state = "paused")
-                "stopped" -> currentState.copy(state = "playing")
-                else -> currentState.copy(state = "playing")
-            }
-        }
 
         action = when(uiState.value.state){
-            "paused" -> "pause"
-            "playing" -> "play"
+            "stopped" -> "play"
+            "playing" -> "pause"
             else -> "resume"
         }
         postJob = viewModelScope.launch {
@@ -76,7 +69,13 @@ class SpeakerViewModel(device: ApiDevice) : ViewModel() {
                     deviceID = uiState.value.id
                 )
             }.onFailure {
-                /*Thorw Notification to user*/
+                postJob = null
+            }
+        }
+        _speakerUiState.update { currentState ->
+            when (uiState.value.state) {
+                "playing" -> currentState.copy(state = "paused")
+                else -> currentState.copy(state = "playing")
             }
         }
         postJob = null
