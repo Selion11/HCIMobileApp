@@ -27,6 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.*
 import androidx.navigation.*
+import com.example.hci_mobileapp.devicesView.DevicesViewModel
 import com.example.hci_mobileapp.notification.MyIntent
 import com.example.hci_mobileapp.notification.SkipNotificationReceiver
 import com.example.hci_mobileapp.ui.theme.HCIMobileAppTheme
@@ -37,6 +38,8 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 class MainActivity : ComponentActivity() {
     private lateinit var receiver: SkipNotificationReceiver
+
+    private var deviceModel = DevicesViewModel()
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +66,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
-                        SmartHomeNavGraph(navController = navController)
+                        SmartHomeNavGraph(navController = navController,deviceModel)
                     }
                 }
             }
@@ -90,6 +93,7 @@ class MainActivity : ComponentActivity() {
         unregisterReceiver(receiver)
     }
 
+
     @OptIn(ExperimentalPermissionsApi::class)
     @Composable
     fun NotificationPermission(
@@ -103,11 +107,10 @@ class MainActivity : ComponentActivity() {
 
         }
     }
-
     companion object {
-        // TODO: valor fijo, cambiar por un valor de dispositivo válido.
-        private const val DEVICE_ID = "0c5574bfcc385fa3"
+       var DEVICE_ID = " "
     }
+
 }
 
 

@@ -10,7 +10,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,10 +25,8 @@ import com.example.hci_mobileapp.lamp.LampViewModel
 import com.example.hci_mobileapp.speaker.SpeakerCard
 import com.example.hci_mobileapp.speaker.SpeakerViewModel
 
-
 @Composable
 fun renderDevices(
-    //modifier: Modifier = Modifier,
     viewModel: DevicesViewModel = viewModel(),
 ) {
     val devicesViewUiState = viewModel.uiState.collectAsState()

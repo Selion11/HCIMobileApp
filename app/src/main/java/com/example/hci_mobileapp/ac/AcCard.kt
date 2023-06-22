@@ -2,6 +2,7 @@ package com.example.hci_mobileapp.ac
 
 // TextField(value = "ingrese nombre", onValueChange = {acViewModel.nameSet(it)})
 
+import android.app.Activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,7 +43,7 @@ import com.example.hci_mobileapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AcCard(
+fun AcCard (
     acViewModel: AcViewModel = viewModel(),
 ) {
     val acUiState = acViewModel.uiState.collectAsState()

@@ -1,21 +1,23 @@
 package com.example.hci_mobileapp.ac
 
+
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
+import com.example.hci_mobileapp.notification.MyIntent
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+
 class AcViewModel(device: ApiDevice) : ViewModel(){
     private val _acUiState = MutableStateFlow(AcUiState())
-
     init {
         _acUiState.value = AcUiState(
             name = device.name,
@@ -158,6 +160,7 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
         }
     }
 
+
     fun turnOnOff(){
         postJob?.cancel()
         _acUiState.update { currentState ->
@@ -180,4 +183,5 @@ class AcViewModel(device: ApiDevice) : ViewModel(){
             }
         }
     }
+
 }

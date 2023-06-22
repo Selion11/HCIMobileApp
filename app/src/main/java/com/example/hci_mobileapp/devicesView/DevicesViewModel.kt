@@ -2,9 +2,11 @@ package com.example.hci_mobileapp.devicesView
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hci_mobileapp.MainActivity
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.AllDevices
 import com.example.hci_mobileapp.data.network.model.ApiDevice
+import com.example.hci_mobileapp.notification.MyApplication
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +31,6 @@ class DevicesViewModel: ViewModel(){
             currentState.copy(MSG = null)
         }
     }*/
-
 
     fun fetchAllDevices(){
         fetchJob?.cancel()
