@@ -8,12 +8,17 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.res.TypedArrayUtils.getString
 import com.example.hci_mobileapp.MainActivity
 import com.example.hci_mobileapp.R
 import com.example.hci_mobileapp.data.network.ApiService
 import com.example.hci_mobileapp.data.network.RetrofitClient
 import com.example.hci_mobileapp.data.network.model.ApiDevice
 import com.example.hci_mobileapp.speaker.SpeakerViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class ShowNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -22,14 +27,16 @@ class ShowNotificationReceiver : BroadcastReceiver() {
             val event : String? = intent.getStringExtra(MyIntent.EVENT)
             Log.d(TAG, "Show notification intent received {$deviceId} {$event})")
 
-            showNotification(context,deviceId!!)
+            showNotification(context,deviceId!!,event!!)
         }
     }
 
-    private fun showNotification(context: Context, device: String) {
+
+    private fun showNotification(context: Context, device: String,event: String) {
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(MyIntent.DEVICE_ID, device)
+            putExtra(MyIntent.EVENT,event)
         }
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -43,16 +50,14 @@ class ShowNotificationReceiver : BroadcastReceiver() {
         )
 
 
+
         val builder = NotificationCompat.Builder(context, MyApplication.CHANNEL_ID)
             .setSmallIcon(R.drawable.notifications)
             .setContentTitle(device)
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-            )
+            .setContentText("The device has done the following action: $event")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-            .addAction( R.drawable.notifications,context.getString(R.string.confirmation),null)
-            .setAutoCancel(false)
+            .setAutoCancel(true)
 
 
         try {

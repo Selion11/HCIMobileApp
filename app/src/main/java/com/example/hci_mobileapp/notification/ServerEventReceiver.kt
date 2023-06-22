@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.example.hci_mobileapp.BuildConfig
+import com.example.hci_mobileapp.data.network.RetrofitClient
+import com.example.hci_mobileapp.data.network.model.ApiDevice
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -27,11 +29,13 @@ class ServerEventReceiver : BroadcastReceiver() {
         GlobalScope.launch(Dispatchers.IO) {
             val events = fetchEvents()
             events?.forEach {
-                Log.d(TAG, "Broadcasting send notification intent (${it.deviceId})")
+                Log.d(TAG, "Broadcasting send notification intent (${it.deviceId})" +
+                        "(${it.event})")
                 val intent2 = Intent().apply {
                     action = MyIntent.SHOW_NOTIFICATION
                     `package` = MyIntent.PACKAGE
                     putExtra(MyIntent.DEVICE_ID, it.deviceId)
+                    putExtra(MyIntent.EVENT,it.event)
                 }
                 context?.sendOrderedBroadcast(intent2, null)
             }
@@ -81,6 +85,7 @@ class ServerEventReceiver : BroadcastReceiver() {
             null
         }
     }
+
 
     companion object {
         private const val TAG = "ServerEventReceiver"

@@ -17,12 +17,13 @@ interface ApiService{
     @GET("/api/devices")
     suspend fun getAllDevices() : Response<AllDevices>
 
-  /*  @GET("/devices/events")
-    suspend fun getAllEvents() : Response<>
 
-    @GET("/devices")
-    suspend fun getDevice(@Query("deviceId")deviceId: String) : Response<>
-*/
+
+    @GET("api/devices/{deviceID}")
+    suspend fun getDevice(
+        @Path("deviceId")deviceId: String
+    ) : Response<ApiDevice>
+
     @PUT("/api/devices/{deviceID}/{actionName}")
     suspend fun doActionBool(
       @Path("actionName") actionName: String?,

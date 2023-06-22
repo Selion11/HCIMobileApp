@@ -96,4 +96,5 @@
     <string name="vertSwingMsg">Selccione un balanceo vertical</string>
     <string name="vol">Volumen</string>
     <string name="channel_description">Cambios a los dispositivos por medio de la api</string>
+    <string name="event">El dispositivo acaba de realizar la siguiente accion:</string>
 </resources>
