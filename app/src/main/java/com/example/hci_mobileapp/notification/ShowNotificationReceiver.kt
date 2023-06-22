@@ -19,7 +19,8 @@ class ShowNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == MyIntent.SHOW_NOTIFICATION) {
             val deviceId: String? = intent.getStringExtra(MyIntent.DEVICE_ID)
-            Log.d(TAG, "Show notification intent received {$deviceId)")
+            val event : String? = intent.getStringExtra(MyIntent.EVENT)
+            Log.d(TAG, "Show notification intent received {$deviceId} {$event})")
 
             showNotification(context,deviceId!!)
         }

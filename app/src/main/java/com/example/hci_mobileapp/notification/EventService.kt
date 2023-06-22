@@ -38,6 +38,7 @@ class EventService : Service() {
                         action = MyIntent.SHOW_NOTIFICATION
                         `package` = MyIntent.PACKAGE
                         putExtra(MyIntent.DEVICE_ID, it.deviceId)
+                        putExtra(MyIntent.EVENT,it.event)
                     }
                     sendOrderedBroadcast(intent2, null)
                 }

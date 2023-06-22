@@ -6,5 +6,7 @@ class MyIntent(deviceID : String) {
         const val SHOW_NOTIFICATION = "com.example.hci_mobileapp.notification.SHOW_NOTIFICATION"
         const val DEVICE_ID = "com.example.hci_mobileapp.DEVICE_ID"
         const val PACKAGE = "com.example.hci_mobileapp"
+        const val EVENT = "com.example.hci.EVENT"
+
     }
 }
