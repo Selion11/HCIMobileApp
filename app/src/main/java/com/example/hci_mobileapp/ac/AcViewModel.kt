@@ -23,9 +23,7 @@ import kotlinx.coroutines.launch
 class AcViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(){
     private val _acUiState = MutableStateFlow(AcUiState())
     private val par = parent
-    fun skipNoti(){
-        uiState.value.id?.let { par.notifGenerate(it) }
-    }
+
     init {
         _acUiState.value = AcUiState(
             name = device.name,
@@ -34,13 +32,18 @@ class AcViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(){
                 R.string.On
             }else R.string.Off
         )
-        device.state?.temperature?.let { setTemp(it) }
-        device.state?.mode?.let { modeSwitch(it) }
-        device.state?.fanSpeed?.let { speedChange(it) }
-        device.state?.verticalSwing?.let { vertSwingChange(it) }
-        device.state?.horizontalSwing?.let { horiSwingChange(it) }
+        device.state?.temperature?.let { setTemp(it,false) }
+        device.state?.mode?.let { modeSwitch(it,false) }
+        device.state?.fanSpeed?.let { speedChange(it,false) }
+        device.state?.verticalSwing?.let { vertSwingChange(it,false) }
+        device.state?.horizontalSwing?.let { horiSwingChange(it,false) }
     }
 
+    private fun skipNoti(flag : Boolean? = true){
+        if (flag == true){
+        uiState.value.id?.let { par.notifGenerate(it) }
+        }
+    }
     val uiState: StateFlow<AcUiState> = _acUiState.asStateFlow()
 
     private var postJob: Job? = null
@@ -50,9 +53,9 @@ class AcViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(){
 
 
 
-    fun setTemp(temp: Int){
+    fun setTemp(temp: Int,skip: Boolean? = true){
         postJob?.cancel()
-        skipNoti()
+        skipNoti(skip)
         action =  "setTemperature"
         postJob = viewModelScope.launch {
             runCatching {
@@ -79,9 +82,9 @@ class AcViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(){
     }
 
 
-    fun modeSwitch(mode: String){
+    fun modeSwitch(mode: String,skip: Boolean? = true){
         postJob?.cancel()
-        skipNoti()
+        skipNoti(skip)
         action = "setMode"
         postJob = viewModelScope.launch {
            runCatching {
@@ -112,9 +115,9 @@ class AcViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(){
         }
     }
 
-    fun speedChange(speed: String){
+    fun speedChange(speed: String,skip: Boolean? = true){
         postJob?.cancel()
-        skipNoti()
+        skipNoti(skip)
         action = "setFanSpeed"
         postJob = viewModelScope.launch {
             runCatching {
@@ -132,9 +135,9 @@ class AcViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(){
     }
 
 
-    fun horiSwingChange(value: String){
+    fun horiSwingChange(value: String,skip: Boolean? = true){
         postJob?.cancel()
-        skipNoti()
+        skipNoti(skip)
         action = "setHorizontalSwing"
         postJob = viewModelScope.launch {
             runCatching {
@@ -156,9 +159,9 @@ class AcViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(){
     }
 
 
-    fun vertSwingChange(value: String){
+    fun vertSwingChange(value: String,skip: Boolean? = true){
         postJob?.cancel()
-        skipNoti()
+        skipNoti(skip)
         action = "setVerticalSwing"
         postJob = viewModelScope.launch {
             runCatching {
@@ -182,9 +185,9 @@ class AcViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(){
 
 
 
-    fun turnOnOff(){
+    fun turnOnOff(skip: Boolean? = true){
         postJob?.cancel()
-        skipNoti()
+        skipNoti(skip)
         _acUiState.update { currentState ->
             if (uiState.value.state == (R.string.Off))
                 currentState.copy(state =  R.string.On)

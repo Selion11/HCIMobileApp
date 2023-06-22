@@ -21,17 +21,20 @@ class SpeakerViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(
 
     private val par = parent
 
-    fun skipNoti(){
-        uiState.value.id?.let { par.notifGenerate(it) }
-    }
     init {
         _speakerUiState.value = SpeakerUiState(
             name = device.name,
             id= device.id,
             state = device.state?.status,
         )
-        device.state?.volume?.let { setVolume(it) }
-        device.state?.genre?.let { genreSet(it) }
+        device.state?.volume?.let { setVolume(it,false) }
+        device.state?.genre?.let { genreSet(it,false) }
+    }
+
+    private fun skipNoti(flag : Boolean? = true){
+        if (flag == true){
+            uiState.value.id?.let { par.notifGenerate(it) }
+        }
     }
 
     val uiState :StateFlow<SpeakerUiState> = _speakerUiState.asStateFlow()
@@ -74,9 +77,9 @@ class SpeakerViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(
         postJob = null
     }
 
-    fun setVolume(vol: Int){
+    fun setVolume(vol: Int,skip: Boolean? = true){
         postJob?.cancel()
-        skipNoti()
+        skipNoti(skip)
         if(vol < 0 || vol > 10){
             //notifs
         }else{
@@ -167,9 +170,9 @@ class SpeakerViewModel(device: ApiDevice, parent: DevicesViewModel) : ViewModel(
         }
 
 
-        fun genreSet(g: String) {
+        fun genreSet(g: String,skip: Boolean? = true) {
             postJob?.cancel()
-            skipNoti()
+            skipNoti(skip)
             action = "setGenre"
             postJob = viewModelScope.launch {
                 kotlin.runCatching {

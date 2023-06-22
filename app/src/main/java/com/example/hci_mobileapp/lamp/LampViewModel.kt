@@ -1,6 +1,7 @@
 package com.example.hci_mobileapp.lamp
 
-import androidx.compose.runtime.Composable
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hci_mobileapp.R
@@ -14,15 +15,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
 
     private val _lampUiState = MutableStateFlow(LampUiState())
 
     private val par = parent
 
-    fun skipNoti(){
-        uiState.value.id?.let { par.notifGenerate(it) }
-    }
+
 
     init {
         _lampUiState.value = LampUiState(
@@ -36,6 +36,12 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
                 R.string.Off
                   }
         )
+    }
+
+    private fun skipNoti(flag : Boolean? = true){
+        if (flag == true){
+            uiState.value.id?.let { par.notifGenerate(it) }
+        }
     }
 
     val uiState: StateFlow<LampUiState> = _lampUiState.asStateFlow()
@@ -54,6 +60,7 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
 
     fun turnOnOff(){
         postJob?.cancel()
+        skipNoti()
         _lampUiState.update { currentState ->
             if (uiState.value.state == (R.string.Off))
                 currentState.copy(state =  R.string.On)
@@ -78,6 +85,7 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
 
     fun colorSet(colorToSet: String){
         postJob?.cancel()
+        skipNoti()
         action = "setColor"
         postJob = viewModelScope.launch {
             runCatching {
@@ -99,6 +107,7 @@ class LampViewModel(device: ApiDevice, parent: DevicesViewModel): ViewModel() {
 
     fun setIntensity(intensity: Int){
         postJob?.cancel()
+        skipNoti()
         action = "setBrightness"
         postJob = viewModelScope.launch {
             runCatching {

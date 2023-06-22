@@ -1,5 +1,7 @@
 package com.example.hci_mobileapp.devicesView
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +27,7 @@ import com.example.hci_mobileapp.lamp.LampViewModel
 import com.example.hci_mobileapp.speaker.SpeakerCard
 import com.example.hci_mobileapp.speaker.SpeakerViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RenderDevices(
     viewModel: DevicesViewModel = viewModel(),
@@ -49,11 +52,11 @@ fun RenderDevices(
             ) {
                 items(items = devs) { item ->
                     when (item.type?.id) {
-                        "c89b94e8581855bc" -> SpeakerCard(speakerViewModel = SpeakerViewModel(item))
+                        "c89b94e8581855bc" -> SpeakerCard(speakerViewModel = SpeakerViewModel(item,viewModel))
                         "li6cbv5sdlatti0j" -> AcCard(acViewModel = AcViewModel(item,viewModel))
-                        "rnizejqr2di0okho" -> FridgeCard(fridgeViewModel = FridgeViewModel(item))
-                        "dbrlsh7o5sn8ur4i" -> FaucetCard(faucetViewModel = FaucetViewModel(item))
-                        "go46xmbqeomjrsjr" -> LampCard(lampViewModel = LampViewModel(item))
+                        "rnizejqr2di0okho" -> FridgeCard(fridgeViewModel = FridgeViewModel(item,viewModel))
+                        "dbrlsh7o5sn8ur4i" -> FaucetCard(faucetViewModel = FaucetViewModel(item,viewModel))
+                        "go46xmbqeomjrsjr" -> LampCard(lampViewModel = LampViewModel(item,viewModel))
                     }
                 }
             }
