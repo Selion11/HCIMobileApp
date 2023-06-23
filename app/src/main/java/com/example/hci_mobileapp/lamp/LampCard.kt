@@ -78,26 +78,27 @@ fun LampCard(
 ) {
     val lampUiState = lampViewModel.uiState.collectAsState()
 
-    val currentColor = remember { lampViewModel.currentColor() }
+    val currentColor = remember { mutableStateOf(
+                lampUiState.value.col?.let {
+                    Color(
+                        Integer.valueOf(it.substring(0, 2), 16),
+                        Integer.valueOf(it.substring(2, 4), 16),
+                        Integer.valueOf(it.substring(4, 6), 16)
+                    )
+                }
+        )}
 
     val intensityDialog = remember { mutableStateOf(false) }
 
     val colorPickerDialog = remember { mutableStateOf(false) }
 
     val hsv = remember {
-        val color = currentColor?.let {
-            Color(
-                Integer.valueOf(it.substring(0, 2), 16),
-                Integer.valueOf(it.substring(2, 4), 16),
-                Integer.valueOf(it.substring(4, 6), 16)
-            )
-        }
         val hsv = floatArrayOf(0f, 0f, 0f)
-        if (color != null) {
+        if (currentColor.value != null) {
             android.graphics.Color.RGBToHSV(
-                color.red.toInt(),
-                color.green.toInt(),
-                color.blue.toInt(),
+                currentColor.value!!.red.toInt(),
+                currentColor.value!!.green.toInt(),
+                currentColor.value!!.blue.toInt(),
                 hsv
             )
         }
@@ -150,8 +151,8 @@ fun LampCard(
                         painter = painterResource(lampViewModel.iconSelection()),
                         contentDescription = stringResource(R.string.lamp),
                         modifier = Modifier.size(45.dp),
-
-                        )
+                        tint = currentColor.value!!
+                    )
                 }
             }
         }
@@ -298,7 +299,7 @@ fun LampCard(
                                         hsv.value.third
                                     )
                                 )
-                                .toHexString()
+                                .toHexString().substring(2).uppercase()
 
                         }
                         Spacer(modifier = Modifier.height(32.dp))
@@ -324,7 +325,14 @@ fun LampCard(
                     TextButton(
                         onClick = {
                             colorPickerDialog.value = false
-                            newColor.value?.let { lampViewModel.colorSet(it.substring(2).uppercase()) }
+                            newColor.value?.let { lampViewModel.colorSet(it) }
+                            currentColor.value = newColor.value?.let {
+                                Color(
+                                    Integer.valueOf(it.substring(0, 2), 16),
+                                    Integer.valueOf(it.substring(2, 4), 16),
+                                    Integer.valueOf(it.substring(4, 6), 16)
+                                )
+                            }
                         },
                     ) {
                         Text(stringResource(id = R.string.confirmation))

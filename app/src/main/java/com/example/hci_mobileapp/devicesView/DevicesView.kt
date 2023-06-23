@@ -40,12 +40,6 @@ fun RenderDevices(
            .fillMaxWidth()
            .padding(horizontal = 6.dp)
    ) {
-        Button(
-            onClick = { viewModel.fetchAllDevices() },
-            modifier = Modifier.align(CenterHorizontally)
-        ) {
-            Text(text = "FETCH")
-        }
         if (devs != null) {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
