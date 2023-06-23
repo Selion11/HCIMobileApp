@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.hci_mobileapp"
-        minSdk 24
+        minSdk 26
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -25,11 +25,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String","API_BASE_URL",
-                    "\"http://192.168.0.7:8080/api/\""
+                    "\"http://192.168.0.119:8080/api/\""
         }
         debug{
             buildConfigField "String","API_BASE_URL",
-                    "\"http://192.168.0.7:8080/api/\""
+                    "\"http://192.168.0.119:8080/api/\""
         }
     }
     compileOptions {

@@ -70,6 +70,11 @@ fun SpeakerCard(
         speakerViewModel.getPlaylist()
     }
 
+    fun genreAndClose(gen :String){
+        speakerViewModel.genreSet(gen)
+        genDialog.value = false
+    }
+
     Surface(
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(width = 2.dp, color = Color.Black),
@@ -244,7 +249,7 @@ fun SpeakerCard(
                     LazyRow() {
                         items(items = genres) { item ->
                             TextButton(
-                                onClick = { speakerViewModel.genreSet(item) },
+                                onClick = { genreAndClose(item) },
                                 modifier = Modifier.padding(start = 1.dp, end = 1.dp)
                             ) {
                                 Text(item)

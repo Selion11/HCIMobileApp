@@ -55,6 +55,11 @@ fun FridgeCard(
 
     val modes = stringArrayResource(id = fridgeState.value.modes)
 
+    fun ModeAndClose(item: String){
+        fridgeViewModel.modeSet(item)
+        modesOpen.value = false
+    }
+
     Surface(
         shape = MaterialTheme.shapes.small,
         border = BorderStroke(width = 2.dp, color = Color.Black),
@@ -174,7 +179,7 @@ fun FridgeCard(
                         items(items = modes){
                                 item ->
                             TextButton(
-                                onClick = { fridgeViewModel.modeSet(item) },
+                                onClick = { ModeAndClose(item) },
                                 modifier = Modifier.padding(start = 1.dp, end = 1.dp)
                             )   {
                                 Text(item)
