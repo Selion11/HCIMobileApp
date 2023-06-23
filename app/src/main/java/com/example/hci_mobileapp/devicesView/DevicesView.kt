@@ -1,5 +1,6 @@
 package com.example.hci_mobileapp.devicesView
 
+import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
@@ -7,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -14,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.hci_mobileapp.ac.AcCard
@@ -32,36 +36,98 @@ import com.example.hci_mobileapp.speaker.SpeakerViewModel
 fun RenderDevices(
     viewModel: DevicesViewModel = viewModel(),
 ) {
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLargeTablet = LocalConfiguration.current.screenWidthDp >= 600
+
     val devicesViewUiState = viewModel.uiState.collectAsState()
     val devs = devicesViewUiState.value.devices
-   Column(
-       verticalArrangement = Arrangement.spacedBy(8.dp),
-       modifier = Modifier
-           .fillMaxWidth()
-           .padding(horizontal = 6.dp)
-   ) {
-        if (devs != null) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(items = devs) { item ->
-                    when (item.type?.id) {
-                        "c89b94e8581855bc" -> SpeakerCard(speakerViewModel = SpeakerViewModel(item,viewModel))
-                        "li6cbv5sdlatti0j" -> AcCard(acViewModel = AcViewModel(item,viewModel))
-                        "rnizejqr2di0okho" -> FridgeCard(fridgeViewModel = FridgeViewModel(item,viewModel))
-                        "dbrlsh7o5sn8ur4i" -> FaucetCard(faucetViewModel = FaucetViewModel(item,viewModel))
-                        "go46xmbqeomjrsjr" -> LampCard(lampViewModel = LampViewModel(item,viewModel))
+    if(!isLandscape && !isLargeTablet) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 6.dp)
+        ) {
+            if (devs != null) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(items = devs) { item ->
+                        when (item.type?.id) {
+                            "c89b94e8581855bc" -> SpeakerCard(
+                                speakerViewModel = SpeakerViewModel(
+                                    item,
+                                    viewModel
+                                )
+                            )
+                            "li6cbv5sdlatti0j" -> AcCard(acViewModel = AcViewModel(item, viewModel))
+                            "rnizejqr2di0okho" -> FridgeCard(
+                                fridgeViewModel = FridgeViewModel(
+                                    item,
+                                    viewModel
+                                )
+                            )
+                            "dbrlsh7o5sn8ur4i" -> FaucetCard(
+                                faucetViewModel = FaucetViewModel(
+                                    item,
+                                    viewModel
+                                )
+                            )
+                            "go46xmbqeomjrsjr" -> LampCard(
+                                lampViewModel = LampViewModel(
+                                    item,
+                                    viewModel
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 6.dp)
+        ) {
+            if (devs != null) {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(count = devs.size) { index ->
+                        val item = devs.get(index)
+                        when (item.type?.id) {
+                            "c89b94e8581855bc" -> SpeakerCard(
+                                speakerViewModel = SpeakerViewModel(
+                                    item,
+                                    viewModel
+                                )
+                            )
+                            "li6cbv5sdlatti0j" -> AcCard(acViewModel = AcViewModel(item, viewModel))
+                            "rnizejqr2di0okho" -> FridgeCard(
+                                fridgeViewModel = FridgeViewModel(
+                                    item,
+                                    viewModel
+                                )
+                            )
+                            "dbrlsh7o5sn8ur4i" -> FaucetCard(
+                                faucetViewModel = FaucetViewModel(
+                                    item,
+                                    viewModel
+                                )
+                            )
+                            "go46xmbqeomjrsjr" -> LampCard(
+                                lampViewModel = LampViewModel(
+                                    item,
+                                    viewModel
+                                )
+                            )
+                        }
                     }
                 }
             }
         }
     }
 }
-
-
-/*
-@Preview
-@Composable
-fun devPrev(){
-    renderDevices()
-}*/

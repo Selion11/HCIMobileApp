@@ -1,5 +1,10 @@
 package com.example.hci_mobileapp.lamp
 
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.ComposeShader
@@ -31,6 +36,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.ButtonDefaults
@@ -64,6 +70,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.toRect
 import com.example.hci_mobileapp.ui.theme.ComposeColorPickerTheme
 import kotlinx.coroutines.CoroutineScope
@@ -267,7 +276,7 @@ fun LampCard(
         }
     }
 
-    if (colorPickerDialog.value) {
+    if (colorPickerDialog.value && LocalConfiguration.current.orientation != Configuration.ORIENTATION_LANDSCAPE) {
         Dialog(onDismissRequest = { intensityDialog.value = false }) {
             val newColor = remember { mutableStateOf(lampViewModel.currentColor()) }
             Surface(
@@ -577,11 +586,3 @@ fun SatValPanel(
 }
 
 // Color Picker Source Code: https://github.com/V-Abhilash-1999/ComposeColorPicker/blob/main/app/src/main/java/com/abhilash/apps/composecolorpicker/ui/theme/Theme.kt
-
-/*
-@Preview
-@Composable
-fun prev(){
-    LampCard(name = "juenaso")
-}
-*/
